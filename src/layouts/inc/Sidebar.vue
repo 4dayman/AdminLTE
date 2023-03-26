@@ -31,17 +31,17 @@
 
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <nav-item icon="fas fa-home" link="/">
+                    <nav-item icon="fas fa-chart-pie" link="/">
                         Статистика
                     </nav-item>
                     
-                    <nav-item icon="fas fa-info-circle" link="/about">
+                    <nav-item icon="fas fa-copy" link="/about">
                         Банера/Слайдеры
                     </nav-item>
 
                     <li class="nav-item">
                         <router-link to="/films" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon far fa-image"></i>
                             <p>
                                 Фильмы
                                 <i class="right fas fa-angle-left"></i>
@@ -56,7 +56,7 @@
 
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-columns"></i>
                             <p>
                                 Кинотеатры
                                 <i class="right fas fa-angle-left"></i>
@@ -74,7 +74,7 @@
 
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-table"></i>
                             <p>
                                 Новости
                                 <i class="right fas fa-angle-left"></i>
@@ -89,7 +89,7 @@
 
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-tree"></i>
                             <p>
                                 Акции
                                 <i class="right fas fa-angle-left"></i>
@@ -104,7 +104,7 @@
 
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-book"></i>
                             <p>
                                 Страницы
                                 <i class="right fas fa-angle-left"></i>
@@ -137,7 +137,7 @@
                     
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-plus-square"></i>
                             <p>
                                 Пользователи
                                 <i class="right fas fa-angle-left"></i>
@@ -152,7 +152,7 @@
 
                     <li class="nav-item">
                         <router-link to="/about" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-envelope"></i>
                             <p>
                                 Рассылка
                                 <i class="right fas fa-angle-left"></i>
