@@ -9,20 +9,22 @@
                 <p class="login-box-msg">Sign in to start your session</p>
                 <form action="/login" method="post" @submit.prevent="loginSubmit()">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="email" class="form-control" placeholder="Email" v-model.trim="email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
+                        <p v-if="v$.email.$error">{{ v$.email.$errors[0].$message }}</p>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" v-model.trim="password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <p v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</p>
                     </div>
                     <div class="row">
                         <div class="col-8">
@@ -50,11 +52,11 @@
                     </a>
                 </div>
 
-                <p class="mb-1">
-                    <a href="forgot-password.html">I forgot my password</a>
-                </p>
+                <!-- <p class="mb-1">
+                    <a href="#">I forgot my password</a>
+                </p> -->
                 <p class="mb-0">
-                    <a href="register.html" class="text-center">Register a new membership</a>
+                    <a href="/register" class="text-center">Register a new membership</a>
                 </p>
             </div>
 
@@ -63,6 +65,8 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 export default {
     beforeMount() { 
         $('body').removeClass('sidebar-mini').addClass('login-page')
@@ -70,8 +74,48 @@ export default {
     },
     methods: {
         loginSubmit() {
-            window.location.href = '/'
+            this.v$.$touch()
+            this.v$.$validate()
+            if (!this.v$.$error) {
+                // console.log("submit")
+                // this.email = this.password = null
+                // this.v$.$reset()
+                // window.location.href = '/'
+                this.$router.push('/')
+            }
+            const formData = {
+                email: this.email,
+                password: this.password
+            }
+            console.log(formData)
         }
-    }
+    },
+    data() { 
+        return {
+            email: '',
+            password: '',
+        }
+    },
+    setup() {
+        return { v$: useVuelidate() }
+    },
+     validations() {
+        return {
+            email: { required, email },
+            password: { required }
+        }
+    },
 }
 </script>
+
+<style lang="scss" scoped>
+.input-group{
+    p{
+        font-size: 12px;
+        color: #dc3545;
+        position: absolute;
+        bottom: -33px;
+    }
+}
+
+</style>

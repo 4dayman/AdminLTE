@@ -35,7 +35,7 @@
                         Статистика
                     </nav-item>
                     
-                    <nav-item icon="fas fa-copy" link="/about">
+                    <nav-item icon="fas fa-copy" link="/baner">
                         Банера/Слайдеры
                     </nav-item>
 
@@ -55,7 +55,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/cinemas" class="nav-link">
                             <i class="nav-icon fas fa-columns"></i>
                             <p>
                                 Кинотеатры
@@ -63,17 +63,17 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/cinemasOne">
                                 Карточка кинотеатра
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/hallCard">
                                 Карточка зала
                             </nav-item>
                         </ul>
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/news" class="nav-link">
                             <i class="nav-icon fas fa-table"></i>
                             <p>
                                 Новости
@@ -81,14 +81,14 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/newsOne">
                                 Страница новости
                             </nav-item>
                         </ul>
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/prom" class="nav-link">
                             <i class="nav-icon fas fa-tree"></i>
                             <p>
                                 Акции
@@ -96,14 +96,14 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/promOne">
                                 Страница акции
                             </nav-item>
                         </ul>
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/pages" class="nav-link">
                             <i class="nav-icon fas fa-book"></i>
                             <p>
                                 Страницы
@@ -111,32 +111,32 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesMain">
                                 Главная страница
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesAbout">
                                 О кинотеатре
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesCafe">
                                 Кафе - Бар
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesVip">
                                 Vip - Зал
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesComers">
                                 Реклама
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesKids">
                                 Детская комната
                             </nav-item>
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/pagesContacts">
                                 Контакты
                             </nav-item>
                         </ul>
                     </li>
                     
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/user" class="nav-link">
                             <i class="nav-icon fas fa-plus-square"></i>
                             <p>
                                 Пользователи
@@ -144,14 +144,14 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/userEdit">
                                 Редактирование пользователя
                             </nav-item>
                         </ul>
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/about" class="nav-link">
+                        <router-link to="/mailing" class="nav-link">
                             <i class="nav-icon fas fa-envelope"></i>
                             <p>
                                 Рассылка
@@ -159,7 +159,7 @@
                             </p>
                         </router-link>
                         <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/about">
+                            <nav-item icon="fas fa-circle" link="/mailingChoice">
                                 Выбор пользователей
                             </nav-item>
                         </ul>
