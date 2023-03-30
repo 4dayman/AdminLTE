@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 # /dist
-/public/adminlte
+/public/adminlte/
 
 
 # local env files
