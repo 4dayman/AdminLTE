@@ -73,21 +73,25 @@ export default {
         $('title').html(`Login | ${this.$store.state.app.name}`)
     },
     methods: {
-        loginSubmit() {
+        async loginSubmit() {
             this.v$.$touch()
             this.v$.$validate()
             if (!this.v$.$error) {
+                $('body').addClass('sidebar-mini').removeClass('login-page')
                 // console.log("submit")
                 // this.email = this.password = null
                 // this.v$.$reset()
                 // window.location.href = '/'
-                this.$router.push('/')
+                const formData = {
+                    email: this.email,
+                    password: this.password
+                }
+                try {
+                    await this.$store.dispatch('login', formData)
+                    console.log(formData)
+                    this.$router.push('/')
+                } catch (e) {}
             }
-            const formData = {
-                email: this.email,
-                password: this.password
-            }
-            console.log(formData)
         }
     },
     data() { 
