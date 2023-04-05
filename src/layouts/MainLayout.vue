@@ -25,6 +25,7 @@
 <script>
 import Navbar from './inc/Navbar.vue'
 import Sidebar from './inc/Sidebar.vue'
+import 'admin-lte'
 export default {
     components: {
         Navbar, Sidebar
