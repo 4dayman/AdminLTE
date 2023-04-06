@@ -15,8 +15,8 @@ const routes = [
         component: HomeView
       },
       {
-        path: 'baner',
-        name: 'baner',
+        path: 'banner',
+        name: 'banner',
         component: () => import('../views/BanerView.vue')
       },
       {

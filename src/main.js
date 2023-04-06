@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -51,7 +52,9 @@ import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
 // initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
+const pinia = createPinia()
+
 const app = createApp(App)
 app.component('content-header', ContentHeader)
     .component('content', Content)    
-    .use(store).use(router).mount('#app')
+    .use(store).use(pinia).use(router).mount('#app')

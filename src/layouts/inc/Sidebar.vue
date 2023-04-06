@@ -35,7 +35,7 @@
                         Статистика
                     </nav-item>
                     
-                    <nav-item icon="fas fa-copy" link="/baner">
+                    <nav-item icon="fas fa-copy" link="/banner">
                         Банера/Слайдеры
                     </nav-item>
 
