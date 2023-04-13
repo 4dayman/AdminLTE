@@ -6,6 +6,7 @@ export default createStore({
   state: {
     app: {
       name: 'AdminLTE',
+      rotation: 0
     }
   },
   getters: {

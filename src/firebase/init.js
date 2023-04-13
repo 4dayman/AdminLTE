@@ -25,6 +25,8 @@ const db = getFirestore()
 export default db
 // export const db = getFirestore(firebaseApp)
 // export const db = getFirestore()
+// const timestamp = db.firestore.FieldValue.serverTimestamp
+// export {timestamp}
 
 //generate & export auth object
 // export const auth = getAuth(firebaseApp)

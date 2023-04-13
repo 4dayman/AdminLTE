@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import MainLayout from '../layouts/MainLayout'
+import AdminLayout from '../layouts/AdminLayout'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -7,7 +7,7 @@ import RegisterView from '../views/RegisterView.vue'
 const routes = [
   {
     path: '/',
-    component: MainLayout,
+    component: AdminLayout,
     children: [
       {
         path: '',

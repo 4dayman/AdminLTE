@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
-        <navbar />
-        <sidebar />
+        <navbar/>
+        <sidebar/>
 
         <div class="content-wrapper">
 
