@@ -1,6 +1,12 @@
 
 export default {
     state: {
+        mainBanners: {
+            data: [],
+            banners: [],
+            deletedBanners: [],
+            rotationSpeed: 0
+        },
      
         banners: [
             // {
@@ -32,22 +38,7 @@ export default {
     },
     actions: {
         async getAllBanners() { },
-        async uploadBanners() {
-            for (let i = 0; i < this.banners.length; i++) {
-                if (this.banners[i].imgUrl !== null) {
-                    try {
-                        const bannersRef = ref(storage, "banners/movies/" + this.banners[i].imageId);
-                        await uploadBytes(bannersRef, this.banners[i].imgUrl).then(async () => {
-                            await getDownloadURL(bannersRef).then((url) => {
-                                this.banners[i].imgUrl = url;
-                            });
-                        });
-                    } catch (e) {
-                        console.error("Error uploading banners: ", e);
-                    }
-                }
-            }
-         },
+        async uploadBanners() {},
     },
     mutations: {
         SET_BANNERS(state, payload) {
@@ -55,6 +46,6 @@ export default {
         },
     },
     getters: {
-        getBanners: (state) => state.banners,
+        async getBanners() { },
     },
 }

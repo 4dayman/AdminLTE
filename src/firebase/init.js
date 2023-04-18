@@ -21,8 +21,8 @@ initializeApp(firebaseConfig)
 // const firebaseApp = initializeApp(firebaseConfig)
 
 // init firestore
-const db = getFirestore()
-export default db
+export const db = getFirestore()
+// export default db
 // export const db = getFirestore(firebaseApp)
 // export const db = getFirestore()
 // const timestamp = db.firestore.FieldValue.serverTimestamp
@@ -34,8 +34,9 @@ export default db
 export const auth = getAuth()
 
 // const storage = getStorage()
+
 export const storage = getStorage()
 
-
+// export { storage }
 
 // export { db, auth, storage }

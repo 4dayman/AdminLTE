@@ -10,26 +10,6 @@
           <div class="ml-3"><h3>Размер: 1000х1900</h3></div>
           <div class="card-body">
             <banners-list></banners-list>
-
-            <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. -->
-            <!-- <div class="banner" v-for="(banner, index) in banners" :key="index">
-              <BanerImage class="banner-preview" path="folder/1.png"/>
-              <div >                     
-                <img class="banner-preview" :src="banner.url">
-              </div>   
-              <button class="btn btn-primary" @click="this.$refs.input.click()">Добавить</button>
-               <input type="file" ref="input"
-                style="display: none"
-                @change="previewImage" accept="image/*" >
-              <div class="input-group">
-                <p>URL:</p>
-                <input class="form-control" type="text" placeholder="URL" v-model="bannerUrl">
-              </div>
-              <div class="input-group">
-                <p>Title:</p>
-                <input class="form-control" type="text" placeholder="Title" v-model="bannerTitle">
-              </div>
-            </div> -->
             <label class="banners_add">
               <button class="btn btn-primary square" @click="this.$refs.bannersSelect.click()"><i class="fas fa-plus"></i> Добавить фото</button>
               <input class="banner_input" ref="bannersSelect" type="file" multiple="multiple" accept="image/*" @change="bannersSelect($event)">
@@ -37,18 +17,19 @@
           </div>
           <div class="card-footer">
             <div>
-              <p>Скорость вращения {{ this.$store.state.banners.rotation }}</p>
-              <select class="form-control" v-model="this.$store.state.banners.rotation">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+              <p>Скорость вращения {{ this.$store.state.banners.mainBanners.rotationSpeed }}</p>
+              <select class="form-control" v-model="this.$store.state.banners.mainBanners.rotationSpeed">
+                <option value="0">0c</option>
+                <option value="1">1c</option>
+                <option value="2">2c</option>
+                <option value="3">3c</option>
+                <option value="4">4c</option>
+                <option value="5">5c</option>
               </select>
             </div>
-            <button class="btn btn-primary float-right" @click="uploadBanners">Сохранить</button>
+            <button class="btn btn-primary float-right" @click="uploadBannersAndData">Сохранить</button>
           </div>
+          <div>{{ this.$store.state.banners.mainBanners.data }}</div>
         </div>
       </div>
     </div>
@@ -56,75 +37,101 @@
 </template>
 
 <script>
-import { db, storage } from '../firebase/init'
+import { db, storage } from '../firebase/init.js'
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { doc, getDoc, setDoc } from "firebase/firestore"
-// import BanerImage from '../components/BanerImage.vue'
 import BannersList from '../components/BannersList.vue'
-import { mapMutations } from 'vuex'
 
 export default {
   components: {
-    // BanerImage,
     BannersList
   },
-  data() {
-    return {
-      // banners: [],
-    }
-  },
-  computed: {
-    // banners() {
-    //   return this.$store.state.banners.banners
-    // }
+  created() {
+    this.getBanners()
   },
   methods: {
-    // click1() {
-    //   this.$refs.input.click()
-    // },
-    // previewImage(event) {
-    //   const file = event.target.files[0];
-    //   this.url = URL.createObjectURL(file);
-    // },
-
     async bannersSelect(input) {
-      // const file = event.target.files[0];
-      // this.url = URL.createObjectURL(file);
       let banners = input.target.files
       for (let i = 0; i < banners.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 1))
-        this.$store.state.banners.banners.push({
-          id: this.$store.state.banners.banners.length,
-          imageId: 'banner-' + Date.now(),
-          imgUrl: URL.createObjectURL(banners[i]),
+        this.$store.state.banners.mainBanners.data.push({
+          id: this.$store.state.banners.mainBanners.data.length,
+          name: 'banner-' + Date.now(),
           url: '',
           title: '',
+          imgUrl: null,
+        })
+        
+        this.$store.state.banners.mainBanners.banners.push({
+          id: this.$store.state.banners.mainBanners.banners.length,
+          uploaded: false,
+          image: banners[i],
+          imgUrl: URL.createObjectURL(banners[i]),
         })
       }
     },
+    async uploadBannersAndData() {
+       this.uploadBanners()
+         .then(async () => {
+          await new Promise(resolve => setTimeout(resolve, 3000))
+           this.uploadBannersData()
+          console.log('uploaded')
+      })
+    },
+    async uploadBanners() {
+      if (this.$store.state.banners.mainBanners.deletedBanners.length !== 0) {
+        for (let i = 0; i < this.$store.state.banners.mainBanners.deletedBanners.length; i++) {
+          const delRef = ref(storage, "banners/movies/" + this.$store.state.banners.mainBanners.deletedBanners[i]);
+          await deleteObject(delRef).then(() => {
+            this.$store.state.banners.mainBanners.deletedBanners.splice(i, 1);
+          }).catch((error) => {
+            console.error(error);
+          });
+        }
+      }
 
-
-    // upload() {
-    //   const storageRef = ref(storage, 'folder/1.png')
-
-    //   uploadBytes(storageRef, this.$refs.input1.files[0]).then(
-    //     (snapshot) => {
-    //       console.log('uploaded')
-    //     }
-    //   )
-    // }
-    uploadBanners() {
-      // this.$store.banners.uploadBanners()
-      for (let i = 0; i < this.$store.state.banners.banners.length; i++) { 
-        const bannersRef = ref(storage, "banners/movies/" + this.$store.state.banners.banners[i].imageId)
-        uploadBytes(bannersRef, this.$store.state.banners.banners[i].imgUrl).then(async () => {
-          await getDownloadURL(bannersRef).then((url) => {
-            this.$store.state.banners.banners[i].imgUrl = url
-          })
-        })
+      for (let i = 0; i < this.$store.state.banners.mainBanners.banners.length; i++) {
+        if (this.$store.state.banners.mainBanners.banners[i].image !== null) {
+        try {
+            const bannersRef = ref(storage, "banners/movies/" + this.$store.state.banners.mainBanners.data[i].name)
+            uploadBytes(bannersRef, this.$store.state.banners.mainBanners.banners[i].image).then(async () => {
+              await getDownloadURL(bannersRef).then((url) => {
+                this.$store.state.banners.mainBanners.data[i].imgUrl = url
+              })
+            })
+          } catch (e) { console.log(e) }
+        } 
       }
       // console.log( 'uploaded' )
-    }
+      console.log(db)
+      // await new Promise(resolve => setTimeout(resolve, 3000))
+      // this.uploadBannersData()
+      // console.log('uploaded')
+    },
+    async uploadBannersData() {
+      await setDoc(doc(db, 'banners', 'movies'), {
+        data: this.$store.state.banners.mainBanners.data,
+        rotationSpeed: this.$store.state.banners.mainBanners.rotationSpeed
+      })
+    },
+    async getBanners() {
+      this.$store.state.banners.mainBanners.data = []
+      this.$store.state.banners.mainBanners.banners = []
+      const docRef = doc(db, 'banners', 'movies')
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        this.$store.state.banners.mainBanners.rotationSpeed = docSnap.data().rotationSpeed
+        this.$store.state.banners.mainBanners.data = docSnap.data().data
+        for (let i = 0; i < this.$store.state.banners.mainBanners.data.length; i++) {
+          this.$store.state.banners.mainBanners.banners.push({
+            id: i,
+            uploaded: true,
+            image: null,
+            imgUrl: this.$store.state.banners.mainBanners.data[i].imgUrl
+          })
+        }
+      }
+    },
   }
 }
  </script>
