@@ -400,11 +400,13 @@ export default {
 .bg_radio {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .bg_image_body {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .gb_image {

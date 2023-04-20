@@ -5,11 +5,11 @@ import router from './router'
 import store from './store'
 import ContentHeader from './components/ContentHeader.vue'
 import Content from './components/Content.vue'
-// import 'admin-lte/plugins/fontawesome-free/css/all.min.css'
-// import 'admin-lte/dist/css/adminlte.min.css?v=3.2.0'
-// import 'admin-lte/plugins/jquery/jquery.min.js'
-// import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
-// import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
+import 'admin-lte/plugins/fontawesome-free/css/all.min.css'
+import 'admin-lte/dist/css/adminlte.min.css?v=3.2.0'
+import 'admin-lte/plugins/jquery/jquery.min.js'
+import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
+import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
 
 
 // Import the functions you need from the SDKs you need
@@ -52,9 +52,8 @@ import Content from './components/Content.vue'
 // initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
-const pinia = createPinia()
 
 const app = createApp(App)
 app.component('content-header', ContentHeader)
     .component('content', Content)    
-    .use(store).use(pinia).use(router).mount('#app')
+    .use(store).use(router).mount('#app')
