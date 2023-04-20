@@ -51,6 +51,12 @@ export default {
 
 .banner {
     width: 240px;
+
+    img {
+        height: 140px;
+        object-fit: cover;
+    }
+
 }
 
 .card {

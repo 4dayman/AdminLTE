@@ -54,6 +54,10 @@ export default {
 }
 .banner {
   width: 240px;
+  img{
+    height: 140px;
+    object-fit: cover;
+  }
 }
 .card{
     gap: 10px;
