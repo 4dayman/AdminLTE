@@ -51,8 +51,8 @@
                 <p>Фото на фон</p>
               </label>
               <div class="bg_image_body ml-2" v-if="this.$store.state.banners.bgBanners.radioValue == 'img'">
-                <div class="gb_image" v-if="this.$store.state.banners.bgBanners.bgImage.url">
-                  <img :src="this.$store.state.banners.bgBanners.bgImage.url">
+                <div class="gb_image" v-if="this.$store.state.banners.bgBanners.url">
+                  <img :src="this.$store.state.banners.bgBanners.url">
                 </div>
                 <label class="banners_add">
                   <button class="btn btn-primary square" @click="this.$refs.bannersBgSelect.click()"><i
@@ -61,8 +61,8 @@
                   <input class="banner_input" ref="bannersBgSelect" type="file" accept="image/*"
                     @change="bannersBgSelect($event)">
                 </label>
-                <button class="btn btn-primary square" @click="this.$store.state.banners.bgBanners.bgImage.url = ''"
-                  v-if="this.$store.state.banners.bgBanners.bgImage.url"><i class="fas fa-minus"></i>
+                <button class="btn btn-primary square" @click="this.$store.state.banners.bgBanners.url = ''"
+                  v-if="this.$store.state.banners.bgBanners.url"><i class="fas fa-minus"></i>
                   Удалить фото</button>
               </div>
             </div>
@@ -243,7 +243,7 @@ export default {
     async bannersBgSelect(input) {
       let bannersBg = input.target.files[0]
       this.$store.state.banners.bgBanners.image = bannersBg
-      this.$store.state.banners.bgBanners.bgImage.url = URL.createObjectURL(bannersBg)
+      this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
     },
     async uploadBannersBgAndData() {
       if (this.$store.state.banners.bgBanners.image !== null) {
@@ -251,7 +251,7 @@ export default {
           const bannersRef = ref(storage, "banners/bg/bg-1")
           await uploadBytes(bannersRef, this.$store.state.banners.bgBanners.image).then(async () => {
             await getDownloadURL(bannersRef).then((url) => {
-              this.$store.state.banners.bgBanners.bgImage.url = url
+              this.$store.state.banners.bgBanners.url = url
               this.$store.state.banners.bgBanners.image = null
               this.$store.state.banners.bgBanners.color = ''
               this.uploadBannersBgData()
@@ -259,7 +259,7 @@ export default {
           })
         } catch (e) { console.log(e) }
       } else {
-        this.$store.state.banners.bgBanners.bgImage.url = ''
+        this.$store.state.banners.bgBanners.url = ''
         this.uploadBannersBgData()
       }
     },
@@ -267,22 +267,21 @@ export default {
       try {
         await setDoc(doc(db, 'banners', 'bg'), {
           radioValue: this.$store.state.banners.bgBanners.radioValue,
-          bgImage: this.$store.state.banners.bgBanners.bgImage,
+          url: this.$store.state.banners.bgBanners.url,
           color: this.$store.state.banners.bgBanners.color
         })
       } catch (e) { console.log(e) }
     },
     async getBannersBg() {
       this.$store.state.banners.bgBanners.radioValue = ''
-      this.$store.state.banners.bgBanners.bgImage.name = ''
-      this.$store.state.banners.bgBanners.bgImage.url = ''
+      this.$store.state.banners.bgBanners.url = ''
       this.$store.state.banners.bgBanners.image = null
       this.$store.state.banners.bgBanners.color = ''
       const docRef = doc(db, "banners", "bg")
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
         this.$store.state.banners.bgBanners.radioValue = docSnap.data().radioValue;
-        this.$store.state.banners.bgBanners.bgImage = docSnap.data().bgImage;
+        this.$store.state.banners.bgBanners.url = docSnap.data().url;
         this.$store.state.banners.bgBanners.color = docSnap.data().color;
       }
     },

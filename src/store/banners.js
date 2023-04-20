@@ -10,10 +10,7 @@ export default {
         bgBanners: {
             radioValue: '',
             image: null,
-            bgImage: {
-                name: '',
-                url: ''
-            },
+            url: '',
             color: '',
         },
         newsBanners: {
