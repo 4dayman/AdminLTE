@@ -195,7 +195,6 @@ export default {
           });
         }
       }
-
       for (let i = 0; i < this.$store.state.banners.mainBanners.banners.length; i++) {
         if (this.$store.state.banners.mainBanners.banners[i].image !== null) {
           try {
@@ -252,14 +251,11 @@ export default {
           await uploadBytes(bannersRef, this.$store.state.banners.bgBanners.image).then(async () => {
             await getDownloadURL(bannersRef).then((url) => {
               this.$store.state.banners.bgBanners.url = url
-              this.$store.state.banners.bgBanners.image = null
-              this.$store.state.banners.bgBanners.color = ''
               this.uploadBannersBgData()
             })
           })
         } catch (e) { console.log(e) }
       } else {
-        this.$store.state.banners.bgBanners.url = ''
         this.uploadBannersBgData()
       }
     },
@@ -275,7 +271,6 @@ export default {
     async getBannersBg() {
       this.$store.state.banners.bgBanners.radioValue = ''
       this.$store.state.banners.bgBanners.url = ''
-      this.$store.state.banners.bgBanners.image = null
       this.$store.state.banners.bgBanners.color = ''
       const docRef = doc(db, "banners", "bg")
       const docSnap = await getDoc(docRef)
