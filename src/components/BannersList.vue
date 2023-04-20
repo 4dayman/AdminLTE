@@ -52,7 +52,7 @@ export default {
   flex-direction: column;
   gap: 15px;
 }
-.banner, .banner-preview {
+.banner {
   width: 240px;
 }
 .card{
