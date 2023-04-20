@@ -5,10 +5,10 @@
       <div class="col">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">На главной верх</h3>
+            <h3>На главной верх</h3>
           </div>
           <div class="ml-3">
-            <h3>Размер: 1000х1900</h3>
+            <h3 class="card-title">Размер: 1000х1900</h3>
           </div>
           <div class="card-body">
             <banners-list></banners-list>
@@ -38,10 +38,10 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Сквозной банер на заднем фоне</h3>
+            <h3 >Сквозной банер на заднем фоне</h3>
           </div>
           <div class="ml-3">
-            <h3>Размер: 2000х3000</h3>
+            <h3 class="card-title">Размер: 2000х3000</h3>
           </div>
           <div class="card-body body-column">
             <div class="bg_radio">
@@ -100,10 +100,10 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">На главной Новости Акции</h3>
+            <h3>На главной Новости Акции</h3>
           </div>
           <div class="ml-3">
-            <h3>Размер: 1000х1900</h3>
+            <h3 class="card-title">Размер: 1000х1900</h3>
           </div>
           <div class="card-body">
             <banners-news-list></banners-news-list>
