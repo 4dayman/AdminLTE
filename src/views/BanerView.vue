@@ -142,11 +142,13 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import BannersList from '../components/BannersList.vue'
 import BannersNewsList from '../components/BannersNewsList.vue'
+import Loader from '../components/Loader.vue'
 
 export default {
   components: {
     BannersList,
     BannersNewsList,
+    Loader,
   },
   created() {
     this.getBanners()
