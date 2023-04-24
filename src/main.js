@@ -7,9 +7,9 @@ import Content from './components/Content.vue'
 // import 'admin-lte/plugins/fontawesome-free/css/all.min.css'
 // import 'admin-lte/dist/css/adminlte.min.css?v=3.2.0'
 // import 'admin-lte/plugins/jquery/jquery.min.js'
-// import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
-// import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
-import adminLte from 'admin-lte'
+import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
+import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
+// import adminLte from 'admin-lte'
 
 
 // Import the functions you need from the SDKs you need
@@ -56,4 +56,4 @@ import adminLte from 'admin-lte'
 const app = createApp(App)
 app.component('content-header', ContentHeader)
     .component('content', Content)    
-    .use(store).use(router).use(adminLte).mount('#app')
+    .use(store).use(router).mount('#app')

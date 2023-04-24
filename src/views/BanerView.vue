@@ -6,6 +6,12 @@
         <div class="card">
           <div class="card-header">
             <h3>На главной верх</h3>
+            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+              <input type="checkbox" class="custom-control-input" id="mainBannersSwitch"
+                v-model="this.$store.state.banners.mainBanners.toggle">
+              <label class="custom-control-label" for="mainBannersSwitch">{{ this.$store.state.banners.mainBanners.toggle
+              }}</label>
+            </div>
           </div>
           <div class="ml-3">
             <h3 class="card-title">Размер: 1000х1900</h3>
@@ -18,6 +24,7 @@
               <input class="banner_input" ref="bannersSelect" type="file" multiple="multiple" accept="image/*"
                 @change="bannersSelect($event)">
             </label>
+            <loader v-if="this.$store.state.banners.mainBanners.loader"></loader>
           </div>
           <div class="card-footer">
             <div>
@@ -31,14 +38,14 @@
                 <option value="5">5c</option>
               </select>
             </div>
-            <button class="btn btn-primary float-right" @click="uploadBannersAndData">Сохранить</button>
+            <button class="btn btn-primary float-right" @click="uploadBanners">Сохранить</button>
           </div>
-          <div>{{ this.$store.state.banners.mainBanners.data }}</div>
+          <!-- <div>{{ this.$store.state.banners.mainBanners.data }}</div> -->
         </div>
 
         <div class="card">
           <div class="card-header">
-            <h3 >Сквозной банер на заднем фоне</h3>
+            <h3>Сквозной банер на заднем фоне</h3>
           </div>
           <div class="ml-3">
             <h3 class="card-title">Размер: 2000х3000</h3>
@@ -90,17 +97,24 @@
                   Удалить цвет</button>
               </div>
             </div>
-
+            <loader v-if="this.$store.state.banners.bgBanners.loader"></loader>
           </div>
           <div class="card-footer center">
             <button class="btn btn-primary" @click="uploadBannersBgAndData">Сохранить</button>
           </div>
-          <div>{{ this.$store.state.banners.bgBanners }}</div>
+          <!-- <div>{{ this.$store.state.banners.bgBanners }}</div> -->
         </div>
 
         <div class="card">
           <div class="card-header">
             <h3>На главной Новости Акции</h3>
+            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+              <input type="checkbox" class="custom-control-input" id="newsBannersSwitch"
+                v-model="this.$store.state.banners.newsBanners.toggle">
+              <label class="custom-control-label" for="newsBannersSwitch">{{ this.$store.state.banners.newsBanners.toggle
+              }}</label>
+            </div>
+
           </div>
           <div class="ml-3">
             <h3 class="card-title">Размер: 1000х1900</h3>
@@ -114,6 +128,7 @@
               <input class="banner_input" ref="bannersNewsSelect" type="file" multiple="multiple" accept="image/*"
                 @change="bannersNewsSelect($event)">
             </label>
+            <loader v-if="this.$store.state.banners.newsBanners.loader"></loader>
           </div>
           <div class="card-footer">
             <div>
@@ -127,9 +142,9 @@
                 <option value="5">5c</option>
               </select>
             </div>
-            <button class="btn btn-primary float-right" @click="uploadBannersNewsAndData">Сохранить</button>
+            <button class="btn btn-primary float-right" @click="uploadBannersNews">Сохранить</button>
           </div>
-          <div>{{ this.$store.state.banners.newsBanners.data }}</div>
+          <!-- <div>{{ this.$store.state.banners.newsBanners.data }}</div> -->
         </div>
       </div>
     </div>
@@ -177,25 +192,18 @@ export default {
         })
       }
     },
-    async uploadBannersAndData() {
-      this.uploadBanners()
-        .then(async () => {
-          await new Promise(resolve => setTimeout(resolve, 3000))
-          this.uploadBannersData()
-          console.log('uploaded(movies)')
-        })
-    },
     async uploadBanners() {
-
+      this.$store.state.banners.mainBanners.loader = true
       if (this.$store.state.banners.mainBanners.deletedBanners.length !== 0) {
         for (let i = 0; i < this.$store.state.banners.mainBanners.deletedBanners.length; i++) {
           const delRef = ref(storage, "banners/movies/" + this.$store.state.banners.mainBanners.deletedBanners[i]);
           await deleteObject(delRef).then(() => {
-            this.$store.state.banners.mainBanners.deletedBanners.splice(i, 1);
+            this.$store.state.banners.mainBanners.deletedBanners.splice(i, 1)
           }).catch((e) => {
             console.log(e);
           });
         }
+        this.uploadBannersData()
       }
       for (let i = 0; i < this.$store.state.banners.mainBanners.banners.length; i++) {
         if (this.$store.state.banners.mainBanners.banners[i].image !== null) {
@@ -204,29 +212,30 @@ export default {
             uploadBytes(bannersRef, this.$store.state.banners.mainBanners.banners[i].image).then(async () => {
               await getDownloadURL(bannersRef).then((url) => {
                 this.$store.state.banners.mainBanners.data[i].imgUrl = url
+                this.uploadBannersData()
               })
             })
           } catch (e) { console.log(e) }
-        }
+        } else { this.uploadBannersData() }
       }
-      // console.log( 'uploaded' )
-      console.log(db)
-      // await new Promise(resolve => setTimeout(resolve, 3000))
-      // this.uploadBannersData()
-      // console.log('uploaded')
     },
     async uploadBannersData() {
       await setDoc(doc(db, 'banners', 'movies'), {
         data: this.$store.state.banners.mainBanners.data,
-        rotationSpeed: this.$store.state.banners.mainBanners.rotationSpeed
+        rotationSpeed: this.$store.state.banners.mainBanners.rotationSpeed,
+        toggle: this.$store.state.banners.mainBanners.toggle
       })
+      this.$store.state.banners.mainBanners.loader = false
+      console.log('Movies data loaded')
     },
     async getBanners() {
+      this.$store.state.banners.mainBanners.loader = true
       this.$store.state.banners.mainBanners.data = []
       this.$store.state.banners.mainBanners.banners = []
       const docRef = doc(db, 'banners', 'movies')
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
+        this.$store.state.banners.mainBanners.toggle = docSnap.data().toggle
         this.$store.state.banners.mainBanners.rotationSpeed = docSnap.data().rotationSpeed
         this.$store.state.banners.mainBanners.data = docSnap.data().data
         for (let i = 0; i < this.$store.state.banners.mainBanners.data.length; i++) {
@@ -238,6 +247,7 @@ export default {
           })
         }
       }
+      this.$store.state.banners.mainBanners.loader = false
     },
 
     // Bg
@@ -247,6 +257,7 @@ export default {
       this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
     },
     async uploadBannersBgAndData() {
+      this.$store.state.banners.bgBanners.loader = true
       if (this.$store.state.banners.bgBanners.image !== null) {
         try {
           const bannersRef = ref(storage, "banners/bg/bg-1")
@@ -269,8 +280,11 @@ export default {
           color: this.$store.state.banners.bgBanners.color
         })
       } catch (e) { console.log(e) }
+      this.$store.state.banners.bgBanners.loader = false
+      console.log('Bg data loaded')
     },
     async getBannersBg() {
+      this.$store.state.banners.bgBanners.loader = true
       this.$store.state.banners.bgBanners.radioValue = ''
       this.$store.state.banners.bgBanners.url = ''
       this.$store.state.banners.bgBanners.color = ''
@@ -281,6 +295,7 @@ export default {
         this.$store.state.banners.bgBanners.url = docSnap.data().url;
         this.$store.state.banners.bgBanners.color = docSnap.data().color;
       }
+      this.$store.state.banners.bgBanners.loader = false
     },
     // News
     async bannersNewsSelect(input) {
@@ -302,16 +317,8 @@ export default {
         })
       }
     },
-    async uploadBannersNewsAndData() {
-      this.uploadBannersNews()
-        .then(async () => {
-          await new Promise(resolve => setTimeout(resolve, 3000))
-          this.uploadBannersNewsData()
-          console.log('uploaded(news)')
-        })
-    },
     async uploadBannersNews() {
-
+      this.$store.state.banners.newsBanners.loader = true
       if (this.$store.state.banners.newsBanners.deletedBanners.length !== 0) {
         for (let i = 0; i < this.$store.state.banners.newsBanners.deletedBanners.length; i++) {
           const delRef = ref(storage, "banners/news/" + this.$store.state.banners.newsBanners.deletedBanners[i]);
@@ -321,6 +328,7 @@ export default {
             console.log(e);
           });
         }
+        this.uploadBannersNewsData()
       }
 
       for (let i = 0; i < this.$store.state.banners.newsBanners.banners.length; i++) {
@@ -330,29 +338,30 @@ export default {
             uploadBytes(bannersRef, this.$store.state.banners.newsBanners.banners[i].image).then(async () => {
               await getDownloadURL(bannersRef).then((url) => {
                 this.$store.state.banners.newsBanners.data[i].imgUrl = url
+                this.uploadBannersNewsData()
               })
             })
           } catch (e) { console.log(e) }
-        }
+        } else { this.uploadBannersNewsData() }
       }
-      // console.log( 'uploaded' )
-      console.log(db)
-      // await new Promise(resolve => setTimeout(resolve, 3000))
-      // this.uploadBannersData()
-      // console.log('uploaded')
     },
     async uploadBannersNewsData() {
       await setDoc(doc(db, 'banners', 'news'), {
         data: this.$store.state.banners.newsBanners.data,
-        rotationSpeed: this.$store.state.banners.newsBanners.rotationSpeed
+        rotationSpeed: this.$store.state.banners.newsBanners.rotationSpeed,
+        toggle: this.$store.state.banners.newsBanners.toggle
       })
+      this.$store.state.banners.newsBanners.loader = false
+      console.log('News data loaded')
     },
     async getBannersNews() {
+      this.$store.state.banners.newsBanners.loader = true
       this.$store.state.banners.newsBanners.data = []
       this.$store.state.banners.newsBanners.banners = []
       const docRef = doc(db, 'banners', 'news')
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
+        this.$store.state.banners.newsBanners.toggle = docSnap.data().toggle
         this.$store.state.banners.newsBanners.rotationSpeed = docSnap.data().rotationSpeed
         this.$store.state.banners.newsBanners.data = docSnap.data().data
         for (let i = 0; i < this.$store.state.banners.newsBanners.data.length; i++) {
@@ -364,6 +373,7 @@ export default {
           })
         }
       }
+      this.$store.state.banners.newsBanners.loader = false
     },
 
   }
@@ -371,6 +381,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .card-footer {
   display: flex;
   align-items: center;

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import db from '@/firebase/init.js'
+import { db } from '@/firebase/init.js'
 import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, orderBy, limit, deleteDoc, updateDoc, deleteField, onSnapshot } from 'firebase/firestore'
 
 export default {

@@ -5,31 +5,27 @@ export default {
             data: [],
             banners: [],
             deletedBanners: [],
-            rotationSpeed: 0
+            rotationSpeed: 0,
+            toggle: false,
+            loader: false
         },
         bgBanners: {
             radioValue: '',
             image: null,
             url: '',
             color: '',
+            loader: false
         },
         newsBanners: {
             data: [],
             banners: [],
             deletedBanners: [],
-            rotationSpeed: 0
+            rotationSpeed: 0,
+            toggle: false,
+            loader: false
         }
     },
-    actions: {
-        async getAllBanners() { },
-        async uploadBanners() {},
-    },
-    mutations: {
-        SET_BANNERS(state, payload) {
-            state.banners = payload
-        },
-    },
-    getters: {
-        async getBanners() { },
-    },
+    actions: {},
+    mutations: {},
+    getters: {},
 }
