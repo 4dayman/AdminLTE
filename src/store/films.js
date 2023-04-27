@@ -1,21 +1,12 @@
 export default {
     state: {
-        mainBanners: {
+        mainMovies: {
             data: [],
-            banners: [],
-            deletedBanners: [],
-            rotationSpeed: 0,
-            toggle: false,
+            movies: [],
+            deletedMovies: [],
             loader: false
         },
-        bgBanners: {
-            radioValue: '',
-            image: null,
-            url: '',
-            color: '',
-            loader: false
-        },
-        newsBanners: {
+        upcomMovies: {
             data: [],
             banners: [],
             deletedBanners: [],

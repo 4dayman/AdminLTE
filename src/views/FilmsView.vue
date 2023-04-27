@@ -5,13 +5,18 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Фильмы</h3>
+                        <h3 class="card-title">Список фильмов текущих</h3>
                     </div>
                     <div class="card-body">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     </div>
-                    <div class="card-footer">
-                        Footer
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Список фильмов которые покажут скоро</h3>
+                    </div>
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     </div>
                 </div>
             </div>

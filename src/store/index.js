@@ -1,12 +1,12 @@
 import { createStore } from 'vuex'
 import auth from './auth'
 import banners from './banners'
+import films from './films'
 
 export default createStore({
   state: {
     app: {
-      name: 'AdminLTE',
-      rotation: 0
+      name: 'AdminLTE'
     }
   },
   getters: {
@@ -17,6 +17,7 @@ export default createStore({
   },
   modules: {
     auth,
-    banners
+    banners,
+    films
   }
 })
