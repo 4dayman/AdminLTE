@@ -38,8 +38,11 @@
                     <nav-item icon="fas fa-copy" link="/banner">
                         Банера/Слайдеры
                     </nav-item>
+                    <nav-item icon="fas fa-image" link="/films">
+                        Фильмы
+                    </nav-item>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <router-link to="/films" class="nav-link">
                             <i class="nav-icon far fa-image"></i>
                             <p>
@@ -52,7 +55,7 @@
                                 Страница фильма
                             </nav-item>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item">
                         <router-link to="/cinemas" class="nav-link">

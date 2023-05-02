@@ -21,37 +21,42 @@
                         <div class="film_name">
                             <div class="input-group mb-3">
                                 <p>Название фильма:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Название фильма">
+                                <input class="form-control ml-1" type="text" placeholder="Название фильма"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].title">
                             </div>
                         </div>
                         <div class="film_desc">
                             <div class="input-group mb-3">
                                 <p>Описание:</p>
-                                <textarea class="form-control ml-1" type="text" placeholder="Text"></textarea>
+                                <textarea class="form-control ml-1" type="text" placeholder="Text"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].desc"></textarea>
                             </div>
                         </div>
                         <div class="film_banner">
                             <p>Главная картинка:</p>
                             <div class="film_image_body ml-2">
-                                <div class="film_image" v-if="this.$store.state.films.mainMovies.data[0]">
-                                    <img :src="this.$store.state.films">
+                                <div class="film_image"
+                                    v-if="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url">
+                                    <img
+                                        :src="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url">
                                 </div>
                                 <label class="banners_add">
-                                    <button class="btn btn-primary square" @click="this.$refs.filmsSelect.click()"><i
+                                    <button class="btn btn-primary square" @click="this.$refs.bannerSelect.click()"><i
                                             class="fas fa-plus"></i>
                                         Добавить фото</button>
-                                    <input class="banner_input" ref="bannersBgSelect" type="file" accept="image/*"
-                                        @change="filmsSelect($event)">
+                                    <input class="banner_input" ref="bannerSelect" type="file" accept="image/*"
+                                        @change="bannerSelect($event)">
                                 </label>
-                                <button class="btn btn-primary square" @click="this.$store.state.films = ''"
-                                    v-if="this.$store.state.films"><i class="fas fa-minus"></i>
+                                <button class="btn btn-primary square"
+                                    @click="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = ''"><i
+                                        class="fas fa-minus"></i>
                                     Удалить фото</button>
                             </div>
                         </div>
-                        <div class="film_galery film_banner">
+                        <!-- <div class="film_galery film_banner">
                             <p>Галерея картинок:</p>
                             <div class="film_image_body ml-2">
-                                <div class="film_image" v-if="this.$store.state.films">
+                                <div class="film_image" v-if="!this.$store.state.films">
                                     <img :src="this.$store.state.films">
                                 </div>
                                 <label class="banners_add">
@@ -62,14 +67,14 @@
                                         @change="filmsSelect($event)">
                                 </label>
                             </div>
-                        </div>
-                        <div class="film_url">
+                        </div> -->
+                        <!-- <div class="film_url">
                             <div class="input-group mb-3">
                                 <p>Ссылка на трейлер:</p>
                                 <input class="form-control ml-1" type="text" placeholder="Ссылка на видео в youtube">
                             </div>
-                        </div>
-                        <div class="film_type">
+                        </div> -->
+                        <!-- <div class="film_type">
                             <div class="input-group mb-3">
                                 <p>Тип кино:</p>
                                 <div class="form-check ml-2">
@@ -85,8 +90,8 @@
                                     <label class="form-check-label">iMAX</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="film_seo">
+                        </div> -->
+                        <!-- <div class="film_seo">
                             <p>SEO блок:</p>
                             <div class="input-group mb-3">
                                 <p>URL:</p>
@@ -100,15 +105,29 @@
                                 <p>Keywords:</p>
                                 <input class="form-control ml-1" type="text" placeholder="Keywords">
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <p>Description:</p>
-                            <textarea class="form-control ml-1" type="text" placeholder="Description"></textarea>
-                        </div>
+                            <div class="input-group mb-3">
+                                <p>Description:</p>
+                                <textarea class="form-control ml-1" type="text" placeholder="Description"></textarea>
+                            </div>
+                        </div> -->
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-primary float-right" @click="uploadFilm">Сохранить</button>
-                        <button class="btn btn-primary float-right" @click="">Вернуть базовую версию</button>
+                        <div class="custom-control custom-switch custom-switch-lg ">
+                            <input type="checkbox" class="custom-control-input" id="mainBannersSwitch"
+                                v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].toggle">
+                            <label class="custom-control-label" for="mainBannersSwitch"
+                                v-if="!this.$store.state.films.currentList[this.$route.params.id].data[0].toggle">
+                                now
+                            </label>
+                            <label class="custom-control-label" for="mainBannersSwitch"
+                                v-if="this.$store.state.films.currentList[this.$route.params.id].data[0].toggle">
+                                upcom
+                            </label>
+                        </div>
+
+                        <button class="btn btn-primary float-right"
+                            @click="uploadFilm(this.$route.params.id)">Сохранить</button>
+                        <button class="btn btn-primary float-right" @click="resetFilm()">Вернуть базовую версию</button>
                     </div>
                 </div>
             </div>
@@ -126,217 +145,174 @@ export default {
     components: {
         Loader,
     },
-    // created() {
-    //     this.getBanners()
-    //     this.getBannersNews()
-    //     this.getBannersBg()
-    // },
+    created() {
+        this.id = this.$route.params.id
+        //     this.getBanners()
+        //     this.getBannersNews()
+        //     this.getBannersBg()
+    },
+    data() {
+        return {
+            file: null,
+            // id: null,
+
+        }
+    },
     methods: {
-        // Movies
-        // async bannersSelect(input) {
-        //     let banners = input.target.files
-        //     for (let i = 0; i < banners.length; i++) {
+        // async addFilm() {
+        //     for (let i = 0; i < this.$store.state.films.currentList.length; i++) {
         //         await new Promise(resolve => setTimeout(resolve, 1))
-        //         this.$store.state.banners.mainBanners.data.push({
-        //             id: this.$store.state.banners.mainBanners.data.length,
-        //             name: 'banner-' + Date.now(),
-        //             url: '',
+        //         this.$store.state.films.currentList[i].data.push({
+        //             id: this.$store.state.films.currentList.length,
+        //             name: 'cover-' + Date.now(),
         //             title: '',
         //             imgUrl: null,
         //         })
 
-        //         this.$store.state.banners.mainBanners.banners.push({
-        //             id: this.$store.state.banners.mainBanners.banners.length,
+        //         this.$store.state.films.currentList[i].push({
+        //             id: this.$store.state.films.currentList.length,
         //             uploaded: false,
-        //             image: banners[i],
-        //             imgUrl: URL.createObjectURL(banners[i]),
+        //             image: this.file,
+        //             imgUrl: URL.createObjectURL(this.file),
         //         })
-        //     }
-        // },
-        // async uploadBanners() {
-        //     this.$store.state.banners.mainBanners.loader = true
-        //     if (this.$store.state.banners.mainBanners.deletedBanners.length !== 0) {
-        //         for (let i = 0; i < this.$store.state.banners.mainBanners.deletedBanners.length; i++) {
-        //             const delRef = ref(storage, "banners/movies/" + this.$store.state.banners.mainBanners.deletedBanners[i]);
-        //             await deleteObject(delRef).then(() => {
-        //                 this.$store.state.banners.mainBanners.deletedBanners.splice(i, 1)
-        //             }).catch((e) => {
-        //                 console.log(e);
-        //             });
-        //         }
-        //         this.uploadBannersData()
-        //     }
-        //     for (let i = 0; i < this.$store.state.banners.mainBanners.banners.length; i++) {
-        //         if (this.$store.state.banners.mainBanners.banners[i].image !== null) {
-        //             try {
-        //                 const bannersRef = ref(storage, "banners/movies/" + this.$store.state.banners.mainBanners.data[i].name)
-        //                 uploadBytes(bannersRef, this.$store.state.banners.mainBanners.banners[i].image).then(async () => {
-        //                     await getDownloadURL(bannersRef).then((url) => {
-        //                         this.$store.state.banners.mainBanners.data[i].imgUrl = url
-        //                         this.uploadBannersData()
-        //                     })
-        //                 })
-        //             } catch (e) { console.log(e) }
-        //         } else { this.uploadBannersData() }
-        //     }
-        // },
-        // async uploadBannersData() {
-        //     await setDoc(doc(db, 'banners', 'movies'), {
-        //         data: this.$store.state.banners.mainBanners.data,
-        //         rotationSpeed: this.$store.state.banners.mainBanners.rotationSpeed,
-        //         toggle: this.$store.state.banners.mainBanners.toggle
-        //     })
-        //     this.$store.state.banners.mainBanners.loader = false
-        //     console.log('Movies data loaded')
-        // },
-        // async getBanners() {
-        //     this.$store.state.banners.mainBanners.loader = true
-        //     this.$store.state.banners.mainBanners.data = []
-        //     this.$store.state.banners.mainBanners.banners = []
-        //     const docRef = doc(db, 'banners', 'movies')
-        //     const docSnap = await getDoc(docRef)
-        //     if (docSnap.exists()) {
-        //         this.$store.state.banners.mainBanners.toggle = docSnap.data().toggle
-        //         this.$store.state.banners.mainBanners.rotationSpeed = docSnap.data().rotationSpeed
-        //         this.$store.state.banners.mainBanners.data = docSnap.data().data
-        //         for (let i = 0; i < this.$store.state.banners.mainBanners.data.length; i++) {
-        //             this.$store.state.banners.mainBanners.banners.push({
-        //                 id: i,
-        //                 uploaded: true,
-        //                 image: null,
-        //                 imgUrl: this.$store.state.banners.mainBanners.data[i].imgUrl
-        //             })
-        //         }
-        //     }
-        //     this.$store.state.banners.mainBanners.loader = false
-        // },
 
-        // Bg
-        async bannersBgSelect(input) {
-            let bannersBg = input.target.files[0]
-            this.$store.state.banners.bgBanners.image = bannersBg
-            this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
+        //     }
+        //  },
+        bannerSelect() {
+            // let file = input.target.files[0]
+            // this.$store.state.banners.bgBanners.image = bannersBg
+            // this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
+
+            this.file = this.$refs.bannerSelect.files[0]
+            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.image = this.file
+            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = URL.createObjectURL(this.file)
         },
-        // async uploadBannersBgAndData() {
-        //     this.$store.state.banners.bgBanners.loader = true
-        //     if (this.$store.state.banners.bgBanners.image !== null) {
-        //         try {
-        //             const bannersRef = ref(storage, "banners/bg/bg-1")
-        //             await uploadBytes(bannersRef, this.$store.state.banners.bgBanners.image).then(async () => {
-        //                 await getDownloadURL(bannersRef).then((url) => {
-        //                     this.$store.state.banners.bgBanners.url = url
-        //                     this.uploadBannersBgData()
-        //                 })
-        //             })
-        //         } catch (e) { console.log(e) }
-        //     } else {
-        //         this.uploadBannersBgData()
-        //     }
-        // },
-        // async uploadBannersBgData() {
-        //     try {
-        //         await setDoc(doc(db, 'banners', 'bg'), {
-        //             radioValue: this.$store.state.banners.bgBanners.radioValue,
-        //             url: this.$store.state.banners.bgBanners.url,
-        //             color: this.$store.state.banners.bgBanners.color
-        //         })
-        //     } catch (e) { console.log(e) }
-        //     this.$store.state.banners.bgBanners.loader = false
-        //     console.log('Bg data loaded')
-        // },
-        // async getBannersBg() {
-        //     this.$store.state.banners.bgBanners.loader = true
-        //     this.$store.state.banners.bgBanners.radioValue = ''
-        //     this.$store.state.banners.bgBanners.url = ''
-        //     this.$store.state.banners.bgBanners.color = ''
-        //     const docRef = doc(db, "banners", "bg")
-        //     const docSnap = await getDoc(docRef)
-        //     if (docSnap.exists()) {
-        //         this.$store.state.banners.bgBanners.radioValue = docSnap.data().radioValue;
-        //         this.$store.state.banners.bgBanners.url = docSnap.data().url;
-        //         this.$store.state.banners.bgBanners.color = docSnap.data().color;
-        //     }
-        //     this.$store.state.banners.bgBanners.loader = false
-        // },
-        // News
-        // async bannersNewsSelect(input) {
-        //     let bannersNews = input.target.files
-        //     for (let i = 0; i < bannersNews.length; i++) {
-        //         await new Promise(resolve => setTimeout(resolve, 1))
-        //         this.$store.state.banners.newsBanners.data.push({
-        //             id: this.$store.state.banners.newsBanners.data.length,
-        //             name: 'news-' + Date.now(),
-        //             url: '',
-        //             imgUrl: null,
-        //         })
+        async uploadFilm(id) {
 
-        //         this.$store.state.banners.newsBanners.banners.push({
-        //             id: this.$store.state.banners.newsBanners.banners.length,
-        //             uploaded: false,
-        //             image: bannersNews[i],
-        //             imgUrl: URL.createObjectURL(bannersNews[i]),
-        //         })
-        //     }
-        // },
-        // async uploadBannersNews() {
-        //     this.$store.state.banners.newsBanners.loader = true
-        //     if (this.$store.state.banners.newsBanners.deletedBanners.length !== 0) {
-        //         for (let i = 0; i < this.$store.state.banners.newsBanners.deletedBanners.length; i++) {
-        //             const delRef = ref(storage, "banners/news/" + this.$store.state.banners.newsBanners.deletedBanners[i]);
-        //             await deleteObject(delRef).then(() => {
-        //                 this.$store.state.banners.newsBanners.deletedBanners.splice(i, 1);
-        //             }).catch((e) => {
-        //                 console.log(e);
-        //             });
-        //         }
-        //         this.uploadBannersNewsData()
-        //     }
+            for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
+                // upload main image (update if was changed)
+                if (this.$store.state.films.currentList[id].images[0].cover.image !== null) {
+                    try {
+                        const coverRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].name);
+                        await uploadBytes(coverRef, this.$store.state.films.currentList[id].images[0].cover.image).then(async () => {
+                            await getDownloadURL(coverRef).then((url) => {
+                                this.$store.state.films.currentList[id].data[0].cover.url = url;
+                                this.uploadFilmData(id)
+                            });
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
+                } else { this.uploadFilmData(id) }
+                // delete images from gallery
+                if (this.$store.state.films.currentList[id].images[0].deleted.length !== 0) {
+                    for (let j = 0; j < this.$store.state.films.currentList[id].images[0].deleted.length; j++) {
+                        const delRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[0].deleted[j]);
+                        await deleteObject(delRef).then(() => {
+                            this.$store.state.films.currentList[id].images[0].deleted.splice(j, 1);
+                        }).catch((e) => {
+                            console.log(e);
+                        });
+                    }
+                } this.uploadFilmData(id)
+            }
+            this.$router.push({
+                name: 'films',
+            })
+            // const filmRef = ref(storage, "films/cover/c1")
+            // const docRef = filmRef.child('films/cover/c1')
+            // docRef.put(this.file).on("state_change", (snapshot) => {
+            //     console.log(snapshot)
+            // }, (err) => {
+            //     console.log(err)
+            // }, async () => {
+            //     const downloadURL = await docRef.getDownloadURL()
+            //     const timestamp = await Date.now()
+            //     const database = await db.collection(films).doc()
 
-        //     for (let i = 0; i < this.$store.state.banners.newsBanners.banners.length; i++) {
-        //         if (this.$store.state.banners.newsBanners.banners[i].image !== null) {
-        //             try {
-        //                 const bannersRef = ref(storage, "banners/news/" + this.$store.state.banners.newsBanners.data[i].name)
-        //                 uploadBytes(bannersRef, this.$store.state.banners.newsBanners.banners[i].image).then(async () => {
-        //                     await getDownloadURL(bannersRef).then((url) => {
-        //                         this.$store.state.banners.newsBanners.data[i].imgUrl = url
-        //                         this.uploadBannersNewsData()
-        //                     })
-        //                 })
-        //             } catch (e) { console.log(e) }
-        //         } else { this.uploadBannersNewsData() }
-        //     }
-        // },
-        // async uploadBannersNewsData() {
-        //     await setDoc(doc(db, 'banners', 'news'), {
-        //         data: this.$store.state.banners.newsBanners.data,
-        //         rotationSpeed: this.$store.state.banners.newsBanners.rotationSpeed,
-        //         toggle: this.$store.state.banners.newsBanners.toggle
-        //     })
-        //     this.$store.state.banners.newsBanners.loader = false
-        //     console.log('News data loaded')
-        // },
-        // async getBannersNews() {
-        //     this.$store.state.banners.newsBanners.loader = true
-        //     this.$store.state.banners.newsBanners.data = []
-        //     this.$store.state.banners.newsBanners.banners = []
-        //     const docRef = doc(db, 'banners', 'news')
-        //     const docSnap = await getDoc(docRef)
-        //     if (docSnap.exists()) {
-        //         this.$store.state.banners.newsBanners.toggle = docSnap.data().toggle
-        //         this.$store.state.banners.newsBanners.rotationSpeed = docSnap.data().rotationSpeed
-        //         this.$store.state.banners.newsBanners.data = docSnap.data().data
-        //         for (let i = 0; i < this.$store.state.banners.newsBanners.data.length; i++) {
-        //             this.$store.state.banners.newsBanners.banners.push({
-        //                 id: i,
-        //                 uploaded: true,
-        //                 image: null,
-        //                 imgUrl: this.$store.state.banners.newsBanners.data[i].imgUrl
-        //             })
-        //         }
-        //     }
-        //     this.$store.state.banners.newsBanners.loader = false
-        // },
-
+            //     await database.set({
+            //         filmID: database.id,
+            //         filmCover: downloadURL,
+            //         filmTitle: this.filmTitle
+            //     })
+            // }
+            // )
+            // for (let i = 0; i < this.$store.state.films.currentList.length; i++) {
+            //     if (this.$store.state.films.currentList.data.imgUrl !== null) {
+            //         try {
+            //             const filmRef = ref(storage, "films/cover/" + this.$store.state.films.currentList.data.name)
+            //             await uploadBytes(filmRef, this.file).then(async () => {
+            //                 await getDownloadURL(filmRef).then((url) => {
+            //                     this.$store.state.films.currentList.data.imgUrl = url
+            //                     this.uploadFilmData()
+            //                 })
+            //             })
+            //         } catch (e) { console.log(e) }
+            //     } else {
+            //         this.uploadFilmData()
+            //     }
+            // }
+        },
+        async uploadFilmData(id) {
+            const docData = {
+                data: this.$store.state.films.currentList[id].data,
+            }
+            await setDoc(doc(db, "films", this.$store.state.films.currentList[id].name), docData).then(() => {
+                this.uploaded = true;
+            });
+            //     try {
+            //         await setDoc(doc(db, 'films', 'bg'), {
+            //             id: Date.now(),
+            //             url: this.$store.state.films.currentList.data.imgUrl,
+            //             title: this.$store.state.films.currentList.data.title
+            //         })
+            //     } catch (e) { console.log(e) }
+            //     console.log('Bg data loaded')
+            // },
+            // async getFilms() {
+            //     this.$store.state.films.currentList.data.imgUrl = ''
+            //     this.$store.state.films.currentList.data.title = ''
+            //     const docRef = doc(db, "films", "bg")
+            //     const docSnap = await getDoc(docRef)
+            //     if (docSnap.exists()) {
+            //         this.$store.state.films.currentList.data.imgUrl = docSnap.data().url;
+            //         this.$store.state.films.currentList.data.title = docSnap.data().title;
+            //     }
+        },
+        async resetFilm(id) {
+            this.loading = true;
+            if (this.movieList[id].uploaded) {
+                for (let i = 0; i < this.movieList[id].images.length; i++) {
+                    this.movieList[id].images[i].main.name = null;
+                    this.movieList[id].images[i].main.image = null;
+                    this.movieList[id].images[i].main.url = null;
+                    this.movieList[id].images[i].gallery = [];
+                    this.movieList[id].images[i].deleted = [];
+                }
+                const docRef = doc(db, "movies", this.movieList[id].name);
+                // get movie data
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    this.movieList[id].data = docSnap.data().data;
+                    for (let i = 0; i < this.movieList[id].data.length; i++) {
+                        // get movie main image
+                        this.movieList[id].images[i].main.name = this.movieList[id].data[i].main.name;
+                        this.movieList[id].images[i].main.url = this.movieList[id].data[i].main.url;
+                        // get movie gallery
+                        for (let j = 0; j < this.movieList[id].data[i].gallery.length; j++) {
+                            this.movieList[id].images[i].gallery.push({
+                                id: this.movieList[id].data[i].gallery.length,
+                                name: this.movieList[id].data[i].gallery[j].name,
+                                uploaded: true,
+                                image: null,
+                                url: this.movieList[id].data[i].gallery[j].url
+                            });
+                        }
+                    }
+                }
+            }
+            this.loading = false;
+        },
     }
 }
 
@@ -395,5 +371,4 @@ export default {
         height: 100%;
         object-fit: cover;
     }
-}
-</style>
+}</style>

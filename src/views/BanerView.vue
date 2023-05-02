@@ -17,7 +17,7 @@
             <h3 class="card-title">Размер: 1000х1900</h3>
           </div>
           <div class="card-body">
-            <banners-list></banners-list>
+            <banners-list ></banners-list>
             <label class="banners_add">
               <button class="btn btn-primary square" @click="this.$refs.bannersSelect.click()"><i class="fas fa-plus"></i>
                 Добавить фото</button>
