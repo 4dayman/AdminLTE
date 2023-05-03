@@ -190,7 +190,7 @@ export default {
         async uploadFilm(id) {
 
             for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
-                // upload main image (update if was changed)
+                // upload cover image (update if was changed)
                 if (this.$store.state.films.currentList[id].images[0].cover.image !== null) {
                     try {
                         const coverRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].name);

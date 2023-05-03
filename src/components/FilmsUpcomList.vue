@@ -102,28 +102,30 @@ export default {
     top: -10px;
 }
 
-.modal-wrap {
-    position: absolute;
+.modal-wrap{
+    position: fixed;
+    z-index: 100;
     top: 0%;
     left: 0%;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: rgba(112, 112, 112, 0.239);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
-.modal-body {
+.modal-body{
     max-width: 400px;
     max-height: 200px;
-    margin: auto auto;
-    top: 20%;
-
-    .actions {
+    // margin: auto auto;
+    // top: 20%;
+    .actions{
         display: flex;
         justify-content: space-around;
-
-        button {
+        button{
             width: 40%;
         }
 
     }
-}</style>
+}
+</style>
