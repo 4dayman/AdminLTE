@@ -127,7 +127,7 @@
 
                         <button class="btn btn-primary float-right"
                             @click="uploadFilm(this.$route.params.id)">Сохранить</button>
-                        <button class="btn btn-primary float-right" @click="resetFilm()">Вернуть базовую версию</button>
+                        <button class="btn btn-primary float-right" @click="resetFilm(this.$route.params.id)">Вернуть базовую версию</button>
                     </div>
                 </div>
             </div>
@@ -280,38 +280,24 @@ export default {
             //     }
         },
         async resetFilm(id) {
-            this.loading = true;
-            if (this.movieList[id].uploaded) {
-                for (let i = 0; i < this.movieList[id].images.length; i++) {
-                    this.movieList[id].images[i].main.name = null;
-                    this.movieList[id].images[i].main.image = null;
-                    this.movieList[id].images[i].main.url = null;
-                    this.movieList[id].images[i].gallery = [];
-                    this.movieList[id].images[i].deleted = [];
+            if (this.$store.state.films.currentList[id].uploaded) {
+                for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
+                    this.$store.state.films.currentList[id].images[i].cover.name = null;
+                    this.$store.state.films.currentList[id].images[i].cover.image = null;
+                    this.$store.state.films.currentList[id].images[i].cover.url = null;
                 }
-                const docRef = doc(db, "movies", this.movieList[id].name);
-                // get movie data
+                const docRef = doc(db, "films", this.$store.state.films.currentList[id].name);
+                // resets film data
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    this.movieList[id].data = docSnap.data().data;
-                    for (let i = 0; i < this.movieList[id].data.length; i++) {
-                        // get movie main image
-                        this.movieList[id].images[i].main.name = this.movieList[id].data[i].main.name;
-                        this.movieList[id].images[i].main.url = this.movieList[id].data[i].main.url;
-                        // get movie gallery
-                        for (let j = 0; j < this.movieList[id].data[i].gallery.length; j++) {
-                            this.movieList[id].images[i].gallery.push({
-                                id: this.movieList[id].data[i].gallery.length,
-                                name: this.movieList[id].data[i].gallery[j].name,
-                                uploaded: true,
-                                image: null,
-                                url: this.movieList[id].data[i].gallery[j].url
-                            });
-                        }
+                    this.$store.state.films.currentList[id].data = docSnap.data().data;
+                    for (let i = 0; i < this.$store.state.films.currentList[id].data.length; i++) {
+                        // resets film cover 
+                        this.$store.state.films.currentList[id].images[i].cover.name = this.$store.state.films.currentList[id].data[i].cover.name;
+                        this.$store.state.films.currentList[id].images[i].cover.url = this.$store.state.films.currentList[id].data[i].cover.url;
                     }
                 }
             }
-            this.loading = false;
         },
     }
 }

@@ -4,11 +4,14 @@ import router from './router'
 import store from './store'
 import ContentHeader from './components/ContentHeader.vue'
 import Content from './components/Content.vue'
-import 'admin-lte/plugins/fontawesome-free/css/all.min.css'
-import 'admin-lte/dist/css/adminlte.min.css?v=3.2.0'
-import 'admin-lte/plugins/jquery/jquery.min.js'
-import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
-import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
+
+window.$ = window.jQuery = require("jquery");
+
+import '../node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css'
+import '../node_modules/admin-lte/dist/css/adminlte.min.css'
+import '../node_modules/admin-lte/plugins/jquery/jquery.min.js'
+import '../node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
+// import 'admin-lte/dist/js/adminlte.min.js?v=3.2.0'
 // import adminLte from 'admin-lte'
 
 
