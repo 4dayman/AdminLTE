@@ -54,19 +54,19 @@ export default {
                     {
                         title: '',
                         desc: '',
-                        // trailer: '',
-                        // type: [],
+                        trailer: '',
+                        type: [],
                         cover: {
                             name: null,
                             url: null
                         },
-                        // gallery: [],
-                        // seo: {
-                        //     url: '',
-                        //     title: '',
-                        //     keywords: '',
-                        //     desc: ''
-                        // },
+                        gallery: [],
+                        seo: {
+                            url: '',
+                            title: '',
+                            keywords: '',
+                            desc: ''
+                        },
                         toggle: null,
                     }
                 ],

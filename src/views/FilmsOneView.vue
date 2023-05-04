@@ -32,7 +32,7 @@
                                     v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].desc"></textarea>
                             </div>
                         </div>
-                        <div class="film_banner">
+                        <div class="film_banner mb-3">
                             <p>Главная картинка:</p>
                             <div class="film_image_body ml-2">
                                 <div class="film_image"
@@ -41,11 +41,11 @@
                                         :src="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url">
                                 </div>
                                 <label class="banners_add">
-                                    <button class="btn btn-primary square" @click="this.$refs.bannerSelect.click()"><i
+                                    <button class="btn btn-primary square" @click="this.$refs.coverSelect.click()"><i
                                             class="fas fa-plus"></i>
                                         Добавить фото</button>
-                                    <input class="banner_input" ref="bannerSelect" type="file" accept="image/*"
-                                        @change="bannerSelect($event)">
+                                    <input class="banner_input" ref="coverSelect" type="file" accept="image/*"
+                                        @change="coverSelect($event)">
                                 </label>
                                 <button class="btn btn-primary square"
                                     @click="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = ''"><i
@@ -53,21 +53,24 @@
                                     Удалить фото</button>
                             </div>
                         </div>
-                        <!-- <div class="film_galery film_banner">
+                        <div class="film_galery film_banner mb-3">
                             <p>Галерея картинок:</p>
                             <div class="film_image_body ml-2">
-                                <div class="film_image" v-if="!this.$store.state.films">
-                                    <img :src="this.$store.state.films">
+                                <div class="film_image" 
+                                    v-for="image in this.$store.state.films.currentList[this.$route.params.id].images[0].gallery" 
+                                    :key="image.id" >
+                                    <span class="badge bg-danger poa" @click="delGalleryImg(image.id)" >X</span>
+                                    <img :src="image.url">
                                 </div>
                                 <label class="banners_add">
                                     <button class="btn btn-primary square" @click="this.$refs.filmsSelect.click()"><i
                                             class="fas fa-plus"></i>
                                         Добавить фото</button>
-                                    <input class="banner_input" ref="bannersBgSelect" type="file" accept="image/*"
+                                    <input class="banner_input" ref="filmsSelect" type="file" multiple="multiple" accept="image/*"
                                         @change="filmsSelect($event)">
                                 </label>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- <div class="film_url">
                             <div class="input-group mb-3">
                                 <p>Ссылка на трейлер:</p>
@@ -154,6 +157,7 @@ export default {
     data() {
         return {
             file: null,
+            files: null,
             // id: null,
 
         }
@@ -178,15 +182,32 @@ export default {
 
         //     }
         //  },
-        bannerSelect() {
+        coverSelect() {
             // let file = input.target.files[0]
             // this.$store.state.banners.bgBanners.image = bannersBg
             // this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
 
-            this.file = this.$refs.bannerSelect.files[0]
+            this.file = this.$refs.coverSelect.files[0]
             this.$store.state.films.currentList[this.$route.params.id].images[0].cover.image = this.file
             this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = URL.createObjectURL(this.file)
             this.$store.state.films.currentList[this.$route.params.id].data[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].name
+        },
+        filmsSelect() { 
+            this.files = this.$refs.filmsSelect.files
+            for (let i = 0; i < this.files.length; i++) {
+                this.$store.state.films.currentList[this.$route.params.id].data[0].gallery.push({
+                    id: i,
+                    name: 'Gallery-' + Date.now(),
+                    url: null
+                })
+                this.$store.state.films.currentList[this.$route.params.id].images[0].gallery.push({
+                    id: i,
+                    name: this.$store.state.films.currentList[this.$route.params.id].data[0].gallery[i].name,
+                    uploaded: false,
+                    image: this.files[i],
+                    url: URL.createObjectURL(this.files[i])
+                })
+            }
         },
         async uploadFilm(id) {
 
@@ -350,6 +371,7 @@ export default {
 }
 
 .film_image {
+    position: relative;
     width: 240px;
     max-height: 240px;
 
@@ -358,4 +380,12 @@ export default {
         height: 100%;
         object-fit: cover;
     }
-}</style>
+}
+.poa {
+    cursor: pointer;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+}
+
+</style>
