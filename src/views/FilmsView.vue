@@ -49,6 +49,7 @@ export default {
                 id: this.$store.state.films.currentList.length,
                 name: 'film-' + Date.now(),
                 uploaded: false,
+                modal: false,
                 data: [
                     {
                         title: '',

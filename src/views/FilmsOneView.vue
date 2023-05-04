@@ -186,6 +186,7 @@ export default {
             this.file = this.$refs.bannerSelect.files[0]
             this.$store.state.films.currentList[this.$route.params.id].images[0].cover.image = this.file
             this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = URL.createObjectURL(this.file)
+            this.$store.state.films.currentList[this.$route.params.id].data[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].name
         },
         async uploadFilm(id) {
 

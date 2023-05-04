@@ -19,7 +19,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -102,7 +101,7 @@ export default {
     top: -10px;
 }
 
-.modal-wrap{
+.modal-wrap {
     position: fixed;
     z-index: 100;
     top: 0%;
@@ -114,18 +113,20 @@ export default {
     align-items: center;
     justify-content: center;
 }
-.modal-body{
+
+.modal-body {
     max-width: 400px;
     max-height: 200px;
+
     // margin: auto auto;
     // top: 20%;
-    .actions{
+    .actions {
         display: flex;
         justify-content: space-around;
-        button{
+
+        button {
             width: 40%;
         }
 
     }
-}
-</style>
+}</style>
