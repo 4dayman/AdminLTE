@@ -1,7 +1,7 @@
 <template>
     <content-header title="Фильмы" icon="fas fa-info-circle" />
-    <content>
-        <div class="row">
+    <content class="por">
+        <div class="row por">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
@@ -12,6 +12,7 @@
                     <div class="card-body">
                         <div class="film-card-wrap">
                             <FilmsList />
+                            <loader v-if="this.$store.state.films.loader"></loader>
                             <!-- <button class="btn btn-primary square" @click="addFilm"><i class="fas fa-plus"></i>
                                 Добавить фильм</button> -->
                         </div>
@@ -22,10 +23,11 @@
                         <h3 class="card-title">Список фильмов которые покажут скоро</h3>
                     </div>
                     <div class="card-body">
-                            <div class="film-card-wrap">
-                                <FilmsUpcomList />
-                            </div>
+                        <div class="film-card-wrap">
+                            <FilmsUpcomList />
+                            <loader v-if="this.$store.state.films.loader"></loader>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,10 +39,13 @@ import FilmsList from '../components/FilmsList.vue'
 import FilmsUpcomList from '../components/FilmsUpcomList.vue'
 import { collection, doc, getDocs, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db, storage } from '../firebase/init.js'
+import Loader from '../components/Loader.vue'
+
 
 export default {
-    components: { FilmsList, FilmsUpcomList },
+    components: { FilmsList, FilmsUpcomList, Loader },
     created() {
+        // this.$router.go(),
         this.getFilms()
     },
     methods: {
@@ -50,6 +55,7 @@ export default {
                 name: 'film-' + Date.now(),
                 uploaded: false,
                 modal: false,
+                lang: {},
                 data: [
                     {
                         title: '',
@@ -91,6 +97,7 @@ export default {
             })
         },
         async getFilms() {
+            this.$store.state.films.loader = true
             this.$store.state.films.currentList = [];
             const filmsData = await getDocs(collection(db, 'films'))
             filmsData.forEach((doc) => {
@@ -112,6 +119,24 @@ export default {
                     ]
                 })
             });
+            this.$store.state.films.currentList.forEach((film) => {
+                for (let i = 0; i < film.data.length; i++) {
+                    for (let j = 0; j < film.data[i].gallery.length; j++) {
+                        film.images[i].gallery.push({
+                            id: j,
+                            name: film.data[i].gallery[j].name,
+                            uploaded: true,
+                            image: null,
+                            url: film.data[i].gallery[j].url
+                        });
+                    }
+                }
+            })
+            this.$store.state.films.loader = false
+            // this.$router.push({
+            //     name: 'films',
+            // })
+            // this.$router.go({ name: 'films' })
         },
     }
 }
@@ -139,4 +164,8 @@ export default {
 
 .card-body {
     position: relative;
-}</style>
+}
+.por{
+    position: relative;
+}
+</style>

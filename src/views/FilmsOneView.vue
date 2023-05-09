@@ -7,16 +7,16 @@
                     <div class="card-header">
                         <h3 class="card-title">Страница фильма</h3>
                     </div>
-                    <!-- <div class="film_lang">
+                    <div class="film_lang pr-4">
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="ua" value="ua">
-                            <label for="ua" class="custom-control-label">Украинский</label>
+                            <input class="custom-control-input" type="radio" id="ua" value="ua" name="lang">
+                            <label for="ua" class="custom-control-label">UA</label>
                         </div>
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="ru" value="ru">
-                            <label for="ru" class="custom-control-label">руский</label>
+                            <input class="custom-control-input" type="radio" id="eng" value="ru" name="lang">
+                            <label for="eng" class="custom-control-label">ENG</label>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="card-body">
                         <div class="film_name">
                             <div class="input-group mb-3">
@@ -48,7 +48,7 @@
                                         @change="coverSelect($event)">
                                 </label>
                                 <button class="btn btn-primary square"
-                                    @click="this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = ''"><i
+                                    @click="this.$store.state.films.currentList[this.$route.params.id].data[0].cover.url = this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = ''"><i
                                         class="fas fa-minus"></i>
                                     Удалить фото</button>
                             </div>
@@ -71,48 +71,50 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- <div class="film_url">
+                        <div class="film_url">
                             <div class="input-group mb-3">
                                 <p>Ссылка на трейлер:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Ссылка на видео в youtube">
+                                <input class="form-control ml-1" type="text" placeholder="Ссылка на видео в youtube"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].trailer"
+                                >
                             </div>
-                        </div> -->
-                        <!-- <div class="film_type">
+                        </div>
+                        <div class="film_type">
                             <div class="input-group mb-3">
                                 <p>Тип кино:</p>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox">
-                                    <label class="form-check-label">3D</label>
+                                    <input class="form-check-input" type="checkbox" id="3d" value="3d" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].type">
+                                    <label class="form-check-label" for="3d">3D</label>
                                 </div>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox">
-                                    <label class="form-check-label">2D</label>
+                                    <input class="form-check-input" type="checkbox" id="2d" value="2d" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].type">
+                                    <label class="form-check-label" for="2d">2D</label>
                                 </div>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox">
-                                    <label class="form-check-label">iMAX</label>
+                                    <input class="form-check-input" type="checkbox" id="imax" value="imax" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].type">
+                                    <label class="form-check-label" for="imax">iMAX</label>
                                 </div>
                             </div>
-                        </div> -->
-                        <!-- <div class="film_seo">
+                        </div>
+                        <div class="film_seo">
                             <p>SEO блок:</p>
                             <div class="input-group mb-3">
                                 <p>URL:</p>
-                                <input class="form-control ml-1" type="text" placeholder="URL">
+                                <input class="form-control ml-1" type="text" placeholder="URL" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].seo.url">
                             </div>
                             <div class="input-group mb-3">
                                 <p>Title:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Title">
+                                <input class="form-control ml-1" type="text" placeholder="Title" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].seo.title">
                             </div>
                             <div class="input-group mb-3">
                                 <p>Keywords:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Keywords">
+                                <input class="form-control ml-1" type="text" placeholder="Keywords" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].seo.keywords">
                             </div>
                             <div class="input-group mb-3">
                                 <p>Description:</p>
-                                <textarea class="form-control ml-1" type="text" placeholder="Description"></textarea>
+                                <textarea class="form-control ml-1" type="text" placeholder="Description" v-model="this.$store.state.films.currentList[this.$route.params.id].data[0].seo.desc"></textarea>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="custom-control custom-switch custom-switch-lg ">
@@ -132,6 +134,7 @@
                             @click="uploadFilm(this.$route.params.id)">Сохранить</button>
                         <button class="btn btn-primary float-right" @click="resetFilm(this.$route.params.id)">Вернуть базовую версию</button>
                     </div>
+                    <loader v-if="this.$store.state.films.loader"></loader>
                 </div>
             </div>
         </div>
@@ -149,7 +152,7 @@ export default {
         Loader,
     },
     created() {
-        this.id = this.$route.params.id
+        this.$route.params.id = this.$route.params.id
         //     this.getBanners()
         //     this.getBannersNews()
         //     this.getBannersBg()
@@ -182,19 +185,20 @@ export default {
 
         //     }
         //  },
-        coverSelect() {
+        coverSelect(input) {
             // let file = input.target.files[0]
             // this.$store.state.banners.bgBanners.image = bannersBg
             // this.$store.state.banners.bgBanners.url = URL.createObjectURL(bannersBg)
 
-            this.file = this.$refs.coverSelect.files[0]
-            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.image = this.file
-            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = URL.createObjectURL(this.file)
+            let file = input.target.files[0]
+            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.image = file
+            this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url = URL.createObjectURL(file)
             this.$store.state.films.currentList[this.$route.params.id].data[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[0].cover.name = this.$store.state.films.currentList[this.$route.params.id].name
         },
-        filmsSelect() { 
-            this.files = this.$refs.filmsSelect.files
-            for (let i = 0; i < this.files.length; i++) {
+        async filmsSelect(input) { 
+            let files = input.target.files
+            for (let i = 0; i < files.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1))
                 this.$store.state.films.currentList[this.$route.params.id].data[0].gallery.push({
                     id: i,
                     name: 'Gallery-' + Date.now(),
@@ -204,13 +208,26 @@ export default {
                     id: i,
                     name: this.$store.state.films.currentList[this.$route.params.id].data[0].gallery[i].name,
                     uploaded: false,
-                    image: this.files[i],
-                    url: URL.createObjectURL(this.files[i])
+                    image: files[i],
+                    url: URL.createObjectURL(files[i])
                 })
             }
         },
+        delGalleryImg(i) {
+            if (this.$store.state.films.currentList[this.$route.params.id].images[0].gallery[i].uploaded) {
+                this.$store.state.films.currentList[this.$route.params.id].images[0].deleted.push(this.$store.state.films.currentList[this.$route.params.id].data[0].gallery[i].name)
+            }
+            this.$store.state.films.currentList[this.$route.params.id].data[0].gallery.splice(i, 1)
+            this.$store.state.films.currentList[this.$route.params.id].images[0].gallery.splice(i, 1)
+            for (let j = 0; j < this.$store.state.films.currentList[this.$route.params.id].images[0].gallery.length; j++) {
+                if (this.$store.state.films.currentList[this.$route.params.id].images[0].gallery[j].id !== i) {
+                    this.$store.state.films.currentList[this.$route.params.id].data[0].gallery[j].id = this.$store.state.films.currentList[this.$route.params.id].images[0].gallery[j].id = j
+                }
+            }
+        },
         async uploadFilm(id) {
-
+            this.$store.state.films.loader = true
+            this.$store.state.films.uploaded = false;
             for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
                 // upload cover image (update if was changed)
                 if (this.$store.state.films.currentList[id].images[0].cover.image !== null) {
@@ -229,15 +246,36 @@ export default {
                 // delete images from gallery
                 if (this.$store.state.films.currentList[id].images[0].deleted.length !== 0) {
                     for (let j = 0; j < this.$store.state.films.currentList[id].images[0].deleted.length; j++) {
-                        const delRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[0].deleted[j]);
+                        const delRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[0].deleted[j].name);
                         await deleteObject(delRef).then(() => {
                             this.$store.state.films.currentList[id].images[0].deleted.splice(j, 1);
                         }).catch((e) => {
                             console.log(e);
                         });
                     }
-                } this.uploadFilmData(id)
+                    this.uploadFilmData(id)
+                }
+                // upload gallery
+                // if (this.$store.state.films.currentList[id].images[0].gallery.length) {
+                    for (let j = 0; j < this.$store.state.films.currentList[id].images[0].gallery.length; j++) {
+                        if (this.$store.state.films.currentList[id].images[0].gallery[j].image !== null) {
+                            try {
+                                const galleryRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[i].gallery[j].name);
+                                await uploadBytes(galleryRef, this.$store.state.films.currentList[id].images[i].gallery[j].image).then(async () => {
+                                    await getDownloadURL(galleryRef).then((url) => {
+                                        this.$store.state.films.currentList[id].data[i].gallery[j].url = url;
+                                        this.uploadFilmData(id)
+                                    });
+                                });
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        } else { this.uploadFilmData(id) }
+                    }
+                    this.uploadFilmData(id)
+                // } else { this.uploadFilmData(id) }
             }
+            this.$store.state.films.loader = false
             this.$router.push({
                 name: 'films',
             })
@@ -280,7 +318,7 @@ export default {
                 data: this.$store.state.films.currentList[id].data,
             }
             await setDoc(doc(db, "films", this.$store.state.films.currentList[id].name), docData).then(() => {
-                this.uploaded = true;
+                this.$store.state.films.currentList[id].uploaded = true;
             });
             //     try {
             //         await setDoc(doc(db, 'films', 'bg'), {
@@ -302,11 +340,14 @@ export default {
             //     }
         },
         async resetFilm(id) {
+            this.$store.state.films.loader = true
             if (this.$store.state.films.currentList[id].uploaded) {
                 for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
                     this.$store.state.films.currentList[id].images[i].cover.name = null;
                     this.$store.state.films.currentList[id].images[i].cover.image = null;
                     this.$store.state.films.currentList[id].images[i].cover.url = null;
+                    this.$store.state.films.currentList[id].images[i].gallery = [];
+                    this.$store.state.films.currentList[id].images[i].deleted = [];
                 }
                 const docRef = doc(db, "films", this.$store.state.films.currentList[id].name);
                 // resets film data
@@ -317,9 +358,19 @@ export default {
                         // resets film cover 
                         this.$store.state.films.currentList[id].images[i].cover.name = this.$store.state.films.currentList[id].data[i].cover.name;
                         this.$store.state.films.currentList[id].images[i].cover.url = this.$store.state.films.currentList[id].data[i].cover.url;
+                        for (let j = 0; j < this.$store.state.films.currentList[id].data[i].gallery.length; j++) {
+                            this.$store.state.films.currentList[id].images[i].gallery.push({
+                                id: j,
+                                name: this.$store.state.films.currentList[id].data[i].gallery[j].name,
+                                uploaded: true,
+                                image: null,
+                                url: this.$store.state.films.currentList[id].data[i].gallery[j].url
+                            });
+                        }
                     }
                 }
             }
+            this.$store.state.films.loader = false
         },
     }
 }
