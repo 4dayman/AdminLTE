@@ -333,6 +333,7 @@ export default {
         async uploadFilmData(id) {
             const docData = {
                 lang: this.$store.state.films.currentList[id].lang,
+                toggle: this.$store.state.films.currentList[id].toggle,
                 data: this.$store.state.films.currentList[id].data,
             }
             await setDoc(doc(db, "films", this.$store.state.films.currentList[id].name), docData).then(() => {

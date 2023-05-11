@@ -135,6 +135,7 @@ export default {
                     uploaded: true,
                     lang: doc.data().lang,
                     data: doc.data().data,
+                    toggle: doc.data().toggle,
                     images: [
                         {
                             cover: {
