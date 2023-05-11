@@ -1,10 +1,10 @@
 <template>
-    <div class="banner" v-for="(film, i) in currentList" :key="i" v-show="film.data[0].toggle">
+    <div class="banner" v-for="(film, i) in currentList" :key="i" v-show="film.toggle">
         <div class="card p-2 ">
             <span class="badge bg-danger poa" @click="film.modal = !film.modal" v-if="currentList.length > 1">X</span>
             <router-link :to="`filmsOne/${film.id}`" class="input-group">
-                <img :src="film.images[0].cover.url">
-                <h5>{{ film.data[0].title }}</h5>
+                <img :src="film.images[film.lang].cover.url">
+                <h5>{{ film.data[film.lang].title }}</h5>
             </router-link>
         </div>
         <div class="modal-wrap" v-if="film.modal">
@@ -37,20 +37,36 @@ export default {
     methods: {
         async deleteFilm(id) {
             this.$store.state.films.currentModal = false;
-            this.loading = true;
+            this.$store.state.films.loader = true
             if (this.$store.state.films.currentList[id].uploaded) {
                 // delete data
                 await deleteDoc(doc(db, "films", this.$store.state.films.currentList[id].name));
                 // delete images
-                // for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
-                // delete main image
-                // if (this.$store.state.films.currentList[id].name !== null) {
-                const delRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].name);
-                await deleteObject(delRef).catch((e) => {
-                    console.log(e);
-                });
-                // }
-                // }
+                for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
+                    // delete main image
+                    // if (this.$store.state.films.currentList[id].name !== null) {
+                    const delRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].name);
+                    await deleteObject(delRef).catch((e) => {
+                        console.log(e);
+                    });
+                    // }
+                    if (this.$store.state.films.currentList[id].images[i].gallery.length !== 0) {
+                        for (let j = 0; j < this.$store.state.films.currentList[id].images[i].gallery.length; j++) {
+                            const delRef = ref(storage, 'films/gallery/' + this.$store.state.films.currentList[id].images[i].gallery[j].name);
+                            await deleteObject(delRef).catch((e) => {
+                                console.log(e);
+                            });
+                        }
+                    }
+                    if (this.$store.state.films.currentList[id].images[i].deleted.length !== 0) {
+                        for (let j = 0; j < this.$store.state.films.currentList[id].images[i].deleted.length; j++) {
+                            const delRef = ref(storage, 'films/gallery/' + this.$store.state.films.currentList[id].images[i].deleted[j].name);
+                            await deleteObject(delRef).catch((e) => {
+                                console.log(e);
+                            });
+                        }
+                    }
+                }
             }
             this.$store.state.films.currentList.splice(id, 1);
             for (let i = 0; i < this.$store.state.films.currentList.length; i++) {
@@ -58,7 +74,7 @@ export default {
                     this.$store.state.films.currentList[i].id = i;
                 }
             }
-            this.loading = false;
+            this.$store.state.films.loader = false
         },
     }
 }
@@ -135,4 +151,5 @@ export default {
         }
 
     }
-}</style>
+}
+</style>

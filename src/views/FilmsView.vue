@@ -55,7 +55,8 @@ export default {
                 name: 'film-' + Date.now(),
                 uploaded: false,
                 modal: false,
-                lang: {},
+                lang: 0,
+                toggle: null,
                 data: [
                     {
                         title: '',
@@ -73,8 +74,25 @@ export default {
                             keywords: '',
                             desc: ''
                         },
-                        toggle: null,
-                    }
+                        
+                    },
+                    {
+                        title: '',
+                        desc: '',
+                        trailer: '',
+                        type: [],
+                        cover: {
+                            name: null,
+                            url: null
+                        },
+                        gallery: [],
+                        seo: {
+                            url: '',
+                            title: '',
+                            keywords: '',
+                            desc: ''
+                        },
+                        },
                 ],
                 images: [
                     {
@@ -86,7 +104,17 @@ export default {
                         },
                         gallery: [],
                         deleted: []
-                    }
+                    },
+                    {
+                        cover: {
+                            name: null,
+                            image: null,
+                            url: null,
+                            uploaded: false
+                        },
+                        gallery: [],
+                        deleted: []
+                    },
                 ]
             })
             this.$router.push({
@@ -105,6 +133,7 @@ export default {
                     id: this.$store.state.films.currentList.length,
                     name: doc.id,
                     uploaded: true,
+                    lang: doc.data().lang,
                     data: doc.data().data,
                     images: [
                         {
@@ -112,6 +141,15 @@ export default {
                                 name: doc.data().data[0].cover.name,
                                 image: null,
                                 url: doc.data().data[0].cover.url
+                            },
+                            gallery: [],
+                            deleted: []
+                        },
+                        {
+                            cover: {
+                                name: doc.data().data[1].cover.name,
+                                image: null,
+                                url: doc.data().data[1].cover.url
                             },
                             gallery: [],
                             deleted: []
