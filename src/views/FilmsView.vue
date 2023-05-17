@@ -120,7 +120,7 @@ export default {
             this.$router.push({
                 name: 'filmsOne',
                 params: {
-                    id: this.$store.state.films.currentList.length - 1,
+                    id: this.$store.state.films.currentList.length-1 ,
                 }
             })
         },
@@ -162,7 +162,7 @@ export default {
                 for (let i = 0; i < film.data.length; i++) {
                     for (let j = 0; j < film.data[i].gallery.length; j++) {
                         film.images[i].gallery.push({
-                            id: j,
+                            id: film.images[i].gallery.length,
                             name: film.data[i].gallery[j].name,
                             uploaded: true,
                             image: null,

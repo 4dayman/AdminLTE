@@ -2,8 +2,8 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
         <a href="/" class="brand-link">
-            <img src="@/assets/AdminLTELogo.png" :alt="this.$store.state.app.name" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
+            <img src="@/assets/AdminLTELogo.png" :alt="this.$store.state.app.name"
+                class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">{{ this.$store.state.app.name }}</span>
         </a>
 
@@ -34,7 +34,7 @@
                     <nav-item icon="fas fa-chart-pie" link="/">
                         Статистика
                     </nav-item>
-                    
+
                     <nav-item icon="fas fa-copy" link="/banner">
                         Банера/Слайдеры
                     </nav-item>
@@ -75,21 +75,10 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <router-link to="/news" class="nav-link">
-                            <i class="nav-icon fas fa-table"></i>
-                            <p>
-                                Новости
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </router-link>
-                        <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/newsOne">
-                                Страница новости
-                            </nav-item>
-                        </ul>
-                    </li>
-
+                    <nav-item icon="fas fa-image" link="/news">
+                        Новости
+                    </nav-item>
+                    
                     <li class="nav-item">
                         <router-link to="/prom" class="nav-link">
                             <i class="nav-icon fas fa-tree"></i>
@@ -137,7 +126,7 @@
                             </nav-item>
                         </ul>
                     </li>
-                    
+
                     <li class="nav-item">
                         <router-link to="/user" class="nav-link">
                             <i class="nav-icon fas fa-plus-square"></i>

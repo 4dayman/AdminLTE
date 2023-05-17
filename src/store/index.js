@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import auth from './auth'
 import banners from './banners'
 import films from './films'
+import news from './news'
 
 export default createStore({
   state: {
@@ -18,6 +19,7 @@ export default createStore({
   modules: {
     auth,
     banners,
-    films
+    films,
+    news
   }
 })

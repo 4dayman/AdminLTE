@@ -23,7 +23,8 @@
                                 <p>Название фильма:</p>
                                 <input class="form-control ml-1" type="text" placeholder="Название фильма"
                                     v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title">
-                            </div>
+                                </div>
+                                <!-- <p v-if="!this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title">nothing ther</p> -->
                         </div>
                         <div class="film_desc">
                             <div class="input-group mb-3">
@@ -57,9 +58,9 @@
                             <p>Галерея картинок:</p>
                             <div class="film_image_body ml-2">
                                 <div class="film_image" 
-                                    v-for="image in this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].gallery" 
-                                    :key="image.id" >
-                                    <span class="badge bg-danger poa" @click="delGalleryImg(image.id)" >X</span>
+                                    v-for="(image, i) in this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].gallery" 
+                                    :key="i" >
+                                    <span class="badge bg-danger poa" @click="delGalleryImg(i)" >X</span>
                                     <img :src="image.url">
                                 </div>
                                 <label class="banners_add">
@@ -146,13 +147,27 @@ import { db, storage } from '../firebase/init.js'
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import Loader from '../components/Loader.vue'
-
+import { useVuelidate } from '@vuelidate/core'
+import { minLength, required, email, numeric, alpha } from '@vuelidate/validators'
 export default {
     components: {
         Loader,
     },
+    setup() {
+        return { v$: useVuelidate() }
+    },
+    validations() { 
+        return {
+            title:  { required },
+
+        }
+    },
     created() {
-        this.$route.params.id = this.$route.params.id
+        // const film = this.film.find(film => film.id == this.$route.params.id)
+        // if (film) {
+        //     this.film = film
+        // }
+        // this.$route.params.id = this.$route.params.id
         // this.$watch(() => this.$store.state.films.currentList[this.$route.params.id].lang, () => {
         //    this.$store.state.films.currentList[this.$route.params.id].lang
         // })
@@ -165,8 +180,12 @@ export default {
             file: null,
             files: null,
             // id: null,
-
         }
+    },
+    computed: {
+        title() {
+            return this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title 
+        }, 
     },
     watch: {
     },
@@ -200,10 +219,10 @@ export default {
             this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.image = file
             this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.url = URL.createObjectURL(file)
             if (lang === 0) {
-                this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + 'ua'
+                this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + '-ua'
 
             } else {
-                this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + 'eng'
+                this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + '-eng'
             }
         },
         async filmsSelect(input) { 
@@ -212,13 +231,21 @@ export default {
             let files = input.target.files
             for (let i = 0; i < files.length; i++) {
                 await new Promise(resolve => setTimeout(resolve, 1))
-                this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery.push({
-                    id: i,
-                    name: 'Gallery-' + Date.now(),
-                    url: null
-                })
+                if (lang === 0) { 
+                    this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery.push({
+                        id: this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.length,
+                        name: 'Gallery-' + Date.now() + '-ua',
+                        url: null
+                    })
+                } else {
+                    this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery.push({
+                        id: this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.length,
+                        name: 'Gallery-' + Date.now() + '-eng',
+                        url: null
+                    })
+                }
                 this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.push({
-                    id: i,
+                    id: this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.length,
                     name: this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery[i].name,
                     uploaded: false,
                     image: files[i],
@@ -231,104 +258,108 @@ export default {
             // let id = this.$route.params.id
 
             if (this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery[i].uploaded) {
-                this.$store.state.films.currentList[this.$route.params.id].images[lang].deleted.push(this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery[i].name)
+                this.$store.state.films.currentList[this.$route.params.id].images[lang].deleted.push(this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery[i].name)
             }
             this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery.splice(i, 1)
             this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.splice(i, 1)
             for (let j = 0; j < this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.length; j++) {
-                if (this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery[j].id !== i) {
-                    this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery[j].id = this.$store.state.films.currentList[id].images[lang].gallery[j].id = j
+                if (this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery[j].id !== j) {
+                    this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery[j].id = this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery[j].id = j
                 }
             }
         },
         async uploadFilm(id) {
-
-            this.$store.state.films.loader = true
-            this.$store.state.films.uploaded = false;
-            for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
-                // upload cover image (update if was changed)
-                if (this.$store.state.films.currentList[id].images[i].cover.image !== null) {
-                    try {
-                        const coverRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].images[i].cover.name);
-                        await uploadBytes(coverRef, this.$store.state.films.currentList[id].images[i].cover.image).then(async () => {
-                            await getDownloadURL(coverRef).then((url) => {
-                                this.$store.state.films.currentList[id].data[i].cover.url = url;
-                                this.uploadFilmData(id)
+            if (!this.v$.title.$error) {
+                this.$store.state.films.loader = true
+                this.$store.state.films.currentList[id].uploaded = false;
+                for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
+                    // upload cover image (update if was changed)
+                    if (this.$store.state.films.currentList[id].images[i].cover.image !== null) {
+                        try {
+                            const coverRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].images[i].cover.name);
+                            await uploadBytes(coverRef, this.$store.state.films.currentList[id].images[i].cover.image).then(async () => {
+                                await getDownloadURL(coverRef).then((url) => {
+                                    this.$store.state.films.currentList[id].data[i].cover.url = url;
+                                    this.uploadFilmData(id)
+                                });
                             });
-                        });
-                    } catch (e) {
-                        console.log(e);
-                    }
-                } else { this.uploadFilmData(id) }
-                // delete images from gallery
-                if (this.$store.state.films.currentList[id].images[i].deleted.length !== 0) {
-                    for (let j = 0; j < this.$store.state.films.currentList[id].images[i].deleted.length; j++) {
-                        const delRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[i].deleted[j].name);
-                        await deleteObject(delRef).then(() => {
-                            this.$store.state.films.currentList[id].images[i].deleted.splice(j, 1);
-                        }).catch((e) => {
+                        } catch (e) {
                             console.log(e);
-                        });
+                        }
+                    } else { this.uploadFilmData(id) }
+                    // delete images from gallery
+                    if (this.$store.state.films.currentList[id].images[i].deleted.length !== 0) {
+                        for (let j = 0; j < this.$store.state.films.currentList[id].images[i].deleted.length; j++) {
+                            const delRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[i].deleted[j]);
+                            await deleteObject(delRef).then(() => {
+                                this.$store.state.films.currentList[id].images[i].deleted.splice(j, 1);
+                            }).catch((e) => {
+                                console.log(e);
+                            });
+                        }
+                        // this.uploadFilmData(id)
                     }
                     this.uploadFilmData(id)
-                }
-                // upload gallery
-                if (this.$store.state.films.currentList[id].images[i].gallery.length) {
-                    for (let j = 0; j < this.$store.state.films.currentList[id].images[i].gallery.length; j++) {
-                        if (this.$store.state.films.currentList[id].images[i].gallery[j].image !== null) {
-                            try {
-                                const galleryRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[i].gallery[j].name);
-                                await uploadBytes(galleryRef, this.$store.state.films.currentList[id].images[i].gallery[j].image).then(async () => {
-                                    await getDownloadURL(galleryRef).then((url) => {
-                                        this.$store.state.films.currentList[id].data[i].gallery[j].url = url;
-                                        this.uploadFilmData(id)
+                    // upload gallery
+                    if (this.$store.state.films.currentList[id].images[i].gallery.length) {
+                        for (let j = 0; j < this.$store.state.films.currentList[id].images[i].gallery.length; j++) {
+                            if (this.$store.state.films.currentList[id].images[i].gallery[j].image !== null) {
+                                try {
+                                    const galleryRef = ref(storage, "films/gallery/" + this.$store.state.films.currentList[id].images[i].gallery[j].name);
+                                    await uploadBytes(galleryRef, this.$store.state.films.currentList[id].images[i].gallery[j].image).then(async () => {
+                                        await getDownloadURL(galleryRef).then((url) => {
+                                            this.$store.state.films.currentList[id].data[i].gallery[j].url = url;
+                                            // this.$store.state.films.currentList[id].images[i].gallery[j].uploaded = true
+                                            this.uploadFilmData(id)
+                                        });
                                     });
-                                });
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        } else { this.uploadFilmData(id) }
-                    }
-                    // this.uploadFilmData(id)
-                } else { this.uploadFilmData(id) }
-            }
-            this.$store.state.films.loader = false
-            this.$router.push({
-                name: 'films',
-            })
-            // const filmRef = ref(storage, "films/cover/c1")
-            // const docRef = filmRef.child('films/cover/c1')
-            // docRef.put(this.file).on("state_change", (snapshot) => {
-            //     console.log(snapshot)
-            // }, (err) => {
-            //     console.log(err)
-            // }, async () => {
-            //     const downloadURL = await docRef.getDownloadURL()
-            //     const timestamp = await Date.now()
-            //     const database = await db.collection(films).doc()
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            } else { this.uploadFilmData(id) }
+                        }
+                        this.uploadFilmData(id)
+                    } else { this.uploadFilmData(id) }
+                }
+                this.$store.state.films.currentList[id].uploaded = false;
+                this.$store.state.films.loader = false
+                this.$router.push({
+                    name: 'films',
+                })
+                // const filmRef = ref(storage, "films/cover/c1")
+                // const docRef = filmRef.child('films/cover/c1')
+                // docRef.put(this.file).on("state_change", (snapshot) => {
+                //     console.log(snapshot)
+                // }, (err) => {
+                //     console.log(err)
+                // }, async () => {
+                //     const downloadURL = await docRef.getDownloadURL()
+                //     const timestamp = await Date.now()
+                //     const database = await db.collection(films).doc()
 
-            //     await database.set({
-            //         filmID: database.id,
-            //         filmCover: downloadURL,
-            //         filmTitle: this.filmTitle
-            //     })
-            // }
-            // )
-            // for (let i = 0; i < this.$store.state.films.currentList.length; i++) {
-            //     if (this.$store.state.films.currentList.data.imgUrl !== null) {
-            //         try {
-            //             const filmRef = ref(storage, "films/cover/" + this.$store.state.films.currentList.data.name)
-            //             await uploadBytes(filmRef, this.file).then(async () => {
-            //                 await getDownloadURL(filmRef).then((url) => {
-            //                     this.$store.state.films.currentList.data.imgUrl = url
-            //                     this.uploadFilmData()
-            //                 })
-            //             })
-            //         } catch (e) { console.log(e) }
-            //     } else {
-            //         this.uploadFilmData()
-            //     }
-            // }
+                //     await database.set({
+                //         filmID: database.id,
+                //         filmCover: downloadURL,
+                //         filmTitle: this.filmTitle
+                //     })
+                // }
+                // )
+                // for (let i = 0; i < this.$store.state.films.currentList.length; i++) {
+                //     if (this.$store.state.films.currentList.data.imgUrl !== null) {
+                //         try {
+                //             const filmRef = ref(storage, "films/cover/" + this.$store.state.films.currentList.data.name)
+                //             await uploadBytes(filmRef, this.file).then(async () => {
+                //                 await getDownloadURL(filmRef).then((url) => {
+                //                     this.$store.state.films.currentList.data.imgUrl = url
+                //                     this.uploadFilmData()
+                //                 })
+                //             })
+                //         } catch (e) { console.log(e) }
+                //     } else {
+                //         this.uploadFilmData()
+                //     }
+                // }
+            }
         },
         async uploadFilmData(id) {
             const docData = {

@@ -1,10 +1,10 @@
 <template>
-    <div class="banner" v-for="(film, i) in currentList" :key="i" v-show="film.toggle">
+    <div class="banner" v-for="(film, i) in currentList" :key="i" v-show="film.toggle && film.id != 0">
         <div class="card p-2 ">
-            <span class="badge bg-danger poa" @click="film.modal = !film.modal" v-if="currentList.length > 1">X</span>
+            <span class="badge bg-danger poa" @click="film.modal = !film.modal" v-if="currentList.length > 2">X</span>
             <router-link :to="`filmsOne/${film.id}`" class="input-group">
-                <img :src="film.images[film.lang].cover.url">
-                <h5>{{ film.data[film.lang].title }}</h5>
+                <img :src="film.images[0].cover.url">
+                <h5>{{ film.data[0].title }}</h5>
             </router-link>
         </div>
         <div class="modal-wrap" v-if="film.modal">

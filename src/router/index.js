@@ -50,7 +50,7 @@ const routes = [
         component: () => import('../views/NewsView.vue')
       },
       {
-        path: 'newsOne',
+        path: 'newsOne/:id',
         name: 'newsOne',
         component: () => import('../views/NewsOneView.vue')
       },
