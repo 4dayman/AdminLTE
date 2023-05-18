@@ -19,7 +19,7 @@
                     <p v-else>ВЫКЛ</p>
                 </th>
                 <th class="table__item">
-                    <router-link :to="`promsOne/${proms.id}`" class="input-group">
+                    <router-link :to="`promOne/${proms.id}`" class="input-group">
                         <i class="fas fa-pencil-alt"></i>
                     </router-link>
                 </th>
