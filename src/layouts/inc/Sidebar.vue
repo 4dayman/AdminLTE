@@ -42,21 +42,6 @@
                         Фильмы
                     </nav-item>
 
-                    <!-- <li class="nav-item">
-                        <router-link to="/films" class="nav-link">
-                            <i class="nav-icon far fa-image"></i>
-                            <p>
-                                Фильмы
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </router-link>
-                        <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/filmsOne">
-                                Страница фильма
-                            </nav-item>
-                        </ul>
-                    </li> -->
-
                     <li class="nav-item">
                         <router-link to="/cinemas" class="nav-link">
                             <i class="nav-icon fas fa-columns"></i>
@@ -75,24 +60,13 @@
                         </ul>
                     </li>
 
-                    <nav-item icon="fas fa-image" link="/news">
+                    <nav-item icon="fas fa-table" link="/news">
                         Новости
                     </nav-item>
                     
-                    <li class="nav-item">
-                        <router-link to="/prom" class="nav-link">
-                            <i class="nav-icon fas fa-tree"></i>
-                            <p>
-                                Акции
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </router-link>
-                        <ul class="nav nav-treeview">
-                            <nav-item icon="fas fa-circle" link="/promOne">
-                                Страница акции
-                            </nav-item>
-                        </ul>
-                    </li>
+                    <nav-item icon="fas fa-tree" link="/prom">
+                        Акции
+                    </nav-item>
 
                     <li class="nav-item">
                         <router-link to="/pages" class="nav-link">

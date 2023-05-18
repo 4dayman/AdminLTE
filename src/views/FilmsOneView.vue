@@ -183,8 +183,14 @@ export default {
         }
     },
     computed: {
-        title() {
-            return this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title 
+        title: {
+            get() {
+                return this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title 
+            },
+            set(title) {
+                this.v$.title.touch();
+                this.$store.dispatch("updateTitle", title);
+            }
         }, 
     },
     watch: {

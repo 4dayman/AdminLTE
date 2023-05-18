@@ -3,6 +3,7 @@ import auth from './auth'
 import banners from './banners'
 import films from './films'
 import news from './news'
+import proms from './proms'
 
 export default createStore({
   state: {
@@ -20,6 +21,7 @@ export default createStore({
     auth,
     banners,
     films,
-    news
+    news,
+    proms,
   }
 })

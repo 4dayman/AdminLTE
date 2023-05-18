@@ -60,12 +60,7 @@ const routes = [
         component: () => import('../views/PromView.vue')
       },
       {
-        path: 'promOne',
-        name: 'promOne',
-        component: () => import('../views/PromOneView.vue')
-      },
-      {
-        path: 'promOne',
+        path: 'promOne/:id',
         name: 'promOne',
         component: () => import('../views/PromOneView.vue')
       },

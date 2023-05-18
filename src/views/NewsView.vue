@@ -12,7 +12,7 @@
                     <div class="card-body">
                          <div class="film-card-wrap">
                                 <NewsList />
-                                <loader v-if="this.$store.state.films.loader"></loader>
+                                <loader v-if="this.$store.state.news.loader"></loader>
                                 <!-- <button class="btn btn-primary square" @click="addFilm"><i class="fas fa-plus"></i>
                                 Добавить фильм</button> -->
                             </div>
