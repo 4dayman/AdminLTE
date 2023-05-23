@@ -120,7 +120,7 @@ export default {
             this.$router.push({
                 name: 'filmsOne',
                 params: {
-                    id: this.$store.state.films.currentList.length-1 ,
+                    id: this.$store.state.films.currentList.length - 1,
                 }
             })
         },
@@ -133,7 +133,8 @@ export default {
                     id: this.$store.state.films.currentList.length,
                     name: doc.id,
                     uploaded: true,
-                    lang: doc.data().lang,
+                    lang: 0,
+                    // lang: doc.data().lang,
                     data: doc.data().data,
                     toggle: doc.data().toggle,
                     images: [

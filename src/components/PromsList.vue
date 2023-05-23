@@ -65,7 +65,7 @@ export default {
                 for (let i = 0; i < this.$store.state.proms.promsList[id].images.length; i++) {
                     // delete main image
                     // if (this.$store.state.proms.promsList[id].name !== null) {
-                    const delRef = ref(storage, "proms/cover/" + this.$store.state.proms.promsList[id].name);
+                    const delRef = ref(storage, "proms/cover/" + this.$store.state.proms.promsList[id].images[i].name);
                     await deleteObject(delRef).catch((e) => {
                         console.log(e);
                     });

@@ -62,7 +62,7 @@ export default {
                 for (let i = 0; i < this.$store.state.news.newsList[id].images.length; i++) {
                     // delete main image
                     // if (this.$store.state.news.newsList[id].name !== null) {
-                    const delRef = ref(storage, "news/cover/" + this.$store.state.news.newsList[id].name);
+                    const delRef = ref(storage, "news/cover/" + this.$store.state.news.newsList[id].images[i].cover.name);
                     await deleteObject(delRef).catch((e) => {
                         console.log(e);
                     });

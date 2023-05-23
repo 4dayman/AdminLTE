@@ -9,31 +9,47 @@
                     </div>
                     <div class="film_lang pr-4">
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="ua" value="0" name="lang" v-model="this.$store.state.films.currentList[this.$route.params.id].lang">
+                            <input class="custom-control-input" type="radio" id="ua" value="0" name="lang"
+                                @change="langChange"
+                                v-model="this.$store.state.films.currentList[this.$route.params.id].lang">
                             <label for="ua" class="custom-control-label">UA</label>
                         </div>
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="eng" value="1" name="lang" v-model="this.$store.state.films.currentList[this.$route.params.id].lang">
+                            <input class="custom-control-input" type="radio" id="eng" value="1" name="lang"
+                                @change="langChange"
+                                v-model="this.$store.state.films.currentList[this.$route.params.id].lang">
                             <label for="eng" class="custom-control-label">ENG</label>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="film_name">
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Название фильма:</p>
                                 <input class="form-control ml-1" type="text" placeholder="Название фильма"
-                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title">
-                                </div>
-                                <!-- <p v-if="!this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title">nothing ther</p> -->
+                                    v-model.trim="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title"
+                                    :class="(v$.titleUA.$error || v$.titleENG.$error) ? 'invalid' : ''"
+                                    @change="titleChenge">
+                            </div>
+                            <div class="row">
+                                <div class="select_error mr-2" v-if="v$.titleUA.$error"> UA title {{v$.titleUA.$errors[0].$message }}!</div>
+                                <div class="select_error" v-if="v$.titleENG.$error"> ENG title {{ v$.titleENG.$errors[0].$message}}!</div>
+                            </div>
+                            <!-- <p v-if="!this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title">nothing ther</p> -->
                         </div>
                         <div class="film_desc">
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Описание:</p>
                                 <textarea class="form-control ml-1" type="text" placeholder="Text"
+                                    :class="(v$.descUA.$error || v$.descENG.$error) ? 'invalid' : ''"
+                                    @change="descChenge"
                                     v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].desc"></textarea>
                             </div>
+                            <div class="row">
+                                <div class="select_error mr-2" v-if="v$.descUA.$error"> UA desc {{v$.descUA.$errors[0].$message }}!</div>
+                                <div class="select_error" v-if="v$.descENG.$error"> ENG desc {{ v$.descENG.$errors[0].$message}}!</div>
+                            </div>
                         </div>
-                        <div class="film_banner mb-3">
+                        <div class="film_banner mt-3">
                             <p>Главная картинка:</p>
                             <div class="film_image_body ml-2">
                                 <div class="film_image"
@@ -42,78 +58,95 @@
                                         :src="this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].cover.url">
                                 </div>
                                 <label class="banners_add">
-                                    <button class="btn btn-primary square" @click="this.$refs.coverSelect.click()"><i
+                                    <button :class="(v$.coverUA.$error || v$.coverENG.$error) ? 'invalid' : ''"
+                                        class="btn btn-primary square" @click="this.$refs.coverSelect.click()"><i
                                             class="fas fa-plus"></i>
                                         Добавить фото</button>
                                     <input class="banner_input" ref="coverSelect" type="file" accept="image/*"
                                         @change="coverSelect($event)">
                                 </label>
+                                <div class="col">
+                                    <div class="select_error" v-if="v$.coverUA.$error"> UA cover url {{ v$.coverUA.$errors[0].$message}}!</div>
+                                    <div class="select_error" v-if="v$.coverENG.$error"> ENG cover url {{v$.coverENG.$errors[0].$message }}!</div>
+                                </div>
                                 <button class="btn btn-primary square"
                                     @click="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].cover.url = this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].cover.url = ''"><i
                                         class="fas fa-minus"></i>
                                     Удалить фото</button>
                             </div>
                         </div>
-                        <div class="film_galery film_banner mb-3">
+                        <div class="film_galery film_banner mt-3">
                             <p>Галерея картинок:</p>
                             <div class="film_image_body ml-2">
-                                <div class="film_image" 
-                                    v-for="(image, i) in this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].gallery" 
-                                    :key="i" >
-                                    <span class="badge bg-danger poa" @click="delGalleryImg(i)" >X</span>
+                                <div class="film_image"
+                                    v-for="(image, i) in this.$store.state.films.currentList[this.$route.params.id].images[this.$store.state.films.currentList[this.$route.params.id].lang].gallery"
+                                    :key="i">
+                                    <span class="badge bg-danger poa" @click="delGalleryImg(i)">X</span>
                                     <img :src="image.url">
                                 </div>
                                 <label class="banners_add">
                                     <button class="btn btn-primary square" @click="this.$refs.filmsSelect.click()"><i
                                             class="fas fa-plus"></i>
                                         Добавить фото</button>
-                                    <input class="banner_input" ref="filmsSelect" type="file" multiple="multiple" accept="image/*"
-                                        @change="filmsSelect($event)">
+                                    <input class="banner_input" ref="filmsSelect" type="file" multiple="multiple"
+                                        accept="image/*" @change="filmsSelect($event)">
                                 </label>
                             </div>
                         </div>
                         <div class="film_url">
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Ссылка на трейлер:</p>
                                 <input class="form-control ml-1" type="text" placeholder="Ссылка на видео в youtube"
-                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].trailer"
-                                >
+                                    :class="(v$.trailerUA.$error || v$.trailerENG.$error) ? 'invalid' : ''"
+                                    @change="trailerChenge"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].trailer">
+                            </div>
+                            <div class="row">
+                                <div class="select_error mr-2" v-if="v$.trailerUA.$error"> UA trailer {{ v$.trailerUA.$errors[0].$message }}!</div>
+                                <div class="select_error" v-if="v$.trailerENG.$error"> ENG trailer {{ v$.trailerENG.$errors[0].$message }}!</div>
                             </div>
                         </div>
                         <div class="film_type">
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Тип кино:</p>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox" id="3d" value="3d" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
+                                    <input class="form-check-input" type="checkbox" id="3d" value="3d"
+                                        v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
                                     <label class="form-check-label" for="3d">3D</label>
                                 </div>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox" id="2d" value="2d" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
+                                    <input class="form-check-input" type="checkbox" id="2d" value="2d"
+                                        v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
                                     <label class="form-check-label" for="2d">2D</label>
                                 </div>
                                 <div class="form-check ml-2">
-                                    <input class="form-check-input" type="checkbox" id="imax" value="imax" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
+                                    <input class="form-check-input" type="checkbox" id="imax" value="imax"
+                                        v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].type">
                                     <label class="form-check-label" for="imax">iMAX</label>
                                 </div>
                             </div>
                         </div>
                         <div class="film_seo">
                             <p>SEO блок:</p>
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>URL:</p>
-                                <input class="form-control ml-1" type="text" placeholder="URL" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.url">
+                                <input class="form-control ml-1" type="text" placeholder="URL"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.url">
                             </div>
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Title:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Title" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.title">
+                                <input class="form-control ml-1" type="text" placeholder="Title"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.title">
                             </div>
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Keywords:</p>
-                                <input class="form-control ml-1" type="text" placeholder="Keywords" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.keywords">
+                                <input class="form-control ml-1" type="text" placeholder="Keywords"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.keywords">
                             </div>
-                            <div class="input-group mb-3">
+                            <div class="input-group mt-3">
                                 <p>Description:</p>
-                                <textarea class="form-control ml-1" type="text" placeholder="Description" v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.desc"></textarea>
+                                <textarea class="form-control ml-1" type="text" placeholder="Description"
+                                    v-model="this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].seo.desc"></textarea>
                             </div>
                         </div>
                     </div>
@@ -133,7 +166,8 @@
 
                         <button class="btn btn-primary float-right"
                             @click="uploadFilm(this.$route.params.id)">Сохранить</button>
-                        <button class="btn btn-primary float-right" @click="resetFilm(this.$route.params.id)">Вернуть базовую версию</button>
+                        <button class="btn btn-primary float-right" @click="resetFilm(this.$route.params.id)">Вернуть
+                            базовую версию</button>
                     </div>
                     <loader v-if="this.$store.state.films.loader"></loader>
                 </div>
@@ -156,13 +190,27 @@ export default {
     setup() {
         return { v$: useVuelidate() }
     },
-    validations() { 
+    validations() {
         return {
-            title:  { required },
-
+            titleUA: { required },
+            titleENG: { required },
+            coverUA: { required },
+            coverENG: { required },
+            descUA: { required },
+            descENG: { required },
+            trailerUA: { required },
+            trailerENG: { required },
         }
     },
     created() {
+        this.titleUA = this.$store.state.films.currentList[this.$route.params.id].data[0].title
+        this.titleENG = this.$store.state.films.currentList[this.$route.params.id].data[1].title
+        this.descUA = this.$store.state.films.currentList[this.$route.params.id].data[0].desc
+        this.descENG = this.$store.state.films.currentList[this.$route.params.id].data[1].desc
+        this.trailerUA = this.$store.state.films.currentList[this.$route.params.id].data[0].trailer
+        this.trailerENG = this.$store.state.films.currentList[this.$route.params.id].data[1].trailer
+        this.coverUA = this.$store.state.films.currentList[this.$route.params.id].data[0].cover.url
+        this.coverENG = this.$store.state.films.currentList[this.$route.params.id].data[1].cover.url
         // const film = this.film.find(film => film.id == this.$route.params.id)
         // if (film) {
         //     this.film = film
@@ -180,20 +228,37 @@ export default {
             file: null,
             files: null,
             // id: null,
+            titleUA: '',
+            titleENG: '',
+            coverUA: '',
+            coverENG: '',
+            descUA: '',
+            descENG: '',
+            trailerUA: '',
+            trailerENG: '',
         }
     },
     computed: {
-        title: {
-            get() {
-                return this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title 
-            },
-            set(title) {
-                this.v$.title.touch();
-                this.$store.dispatch("updateTitle", title);
-            }
-        }, 
+
+        // title: {
+        //     get() {
+        //         return this.$store.state.films.currentList[this.$route.params.id].data[this.$store.state.films.currentList[this.$route.params.id].lang].title 
+        //     },
+        //     set(title) {
+        //         // this.v$.title.touch();
+        //         this.$store.dispatch("updateTitle", title);
+        //     }
+        // }, 
     },
     watch: {
+        // formWatch() { 
+        //      if (this.$store.state.films.currentList[this.$route.params.id].data[0].title !== '') {
+        //         this.titleUA = this.$store.state.films.currentList[this.$route.params.id].data[0].title
+        //     }
+        //     if (this.$store.state.films.currentList[this.$route.params.id].data[1].title !== '') {
+        //         this.titleENG = this.$store.state.films.currentList[this.$route.params.id].data[1].title
+        //     }
+        // }
     },
     methods: {
         // async addFilm() {
@@ -215,6 +280,39 @@ export default {
 
         //     }
         //  },
+        langChange() {
+            this.titleUA = this.$store.state.films.currentList[this.$route.params.id].data[0].title
+            this.titleENG = this.$store.state.films.currentList[this.$route.params.id].data[1].title
+            this.descUA = this.$store.state.films.currentList[this.$route.params.id].data[0].desc
+            this.descENG = this.$store.state.films.currentList[this.$route.params.id].data[1].desc
+            this.trailerUA = this.$store.state.films.currentList[this.$route.params.id].data[0].trailer
+            this.trailerENG = this.$store.state.films.currentList[this.$route.params.id].data[1].trailer
+        },
+        titleChenge() {
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[0].title !== '') {
+            this.titleUA = this.$store.state.films.currentList[this.$route.params.id].data[0].title
+            // }
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[1].title !== '') {
+            this.titleENG = this.$store.state.films.currentList[this.$route.params.id].data[1].title
+            // }
+        },
+        descChenge() {
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[0].title !== '') {
+            this.descUA = this.$store.state.films.currentList[this.$route.params.id].data[0].desc
+            // }
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[1].title !== '') {
+            this.descENG = this.$store.state.films.currentList[this.$route.params.id].data[1].desc
+            // }
+        },
+        trailerChenge() {
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[0].title !== '') {
+            this.trailerUA = this.$store.state.films.currentList[this.$route.params.id].data[0].trailer
+            // }
+            // if (this.$store.state.films.currentList[this.$route.params.id].data[1].title !== '') {
+            this.trailerENG = this.$store.state.films.currentList[this.$route.params.id].data[1].trailer
+            // }
+        },
+
         coverSelect(input) {
             // let file = input.target.files[0]
             // this.$store.state.banners.bgBanners.image = bannersBg
@@ -224,20 +322,23 @@ export default {
             let file = input.target.files[0]
             this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.image = file
             this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.url = URL.createObjectURL(file)
+            this.coverUA = this.$store.state.films.currentList[this.$route.params.id].images[0].cover.url
+            this.coverENG = this.$store.state.films.currentList[this.$route.params.id].images[1].cover.url
             if (lang === 0) {
                 this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + '-ua'
 
             } else {
                 this.$store.state.films.currentList[this.$route.params.id].data[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].images[lang].cover.name = this.$store.state.films.currentList[this.$route.params.id].name + '-eng'
+
             }
         },
-        async filmsSelect(input) { 
+        async filmsSelect(input) {
             let lang = this.$store.state.films.currentList[this.$route.params.id].lang
             // let id = this.$route.params.id
             let files = input.target.files
             for (let i = 0; i < files.length; i++) {
                 await new Promise(resolve => setTimeout(resolve, 1))
-                if (lang === 0) { 
+                if (lang === 0) {
                     this.$store.state.films.currentList[this.$route.params.id].data[lang].gallery.push({
                         id: this.$store.state.films.currentList[this.$route.params.id].images[lang].gallery.length,
                         name: 'Gallery-' + Date.now() + '-ua',
@@ -275,7 +376,12 @@ export default {
             }
         },
         async uploadFilm(id) {
-            if (!this.v$.title.$error) {
+            this.v$.$touch()
+            this.v$.$validate()
+            if (!this.v$.titleUA.$error && !this.v$.titleENG.$error &&
+                !this.v$.coverUA.$error && !this.v$.coverENG.$error && 
+                !this.v$.descUA.$error && !this.v$.descENG.$error && 
+                !this.v$.trailerUA.$error && !this.v$.trailerENG.$error) {
                 this.$store.state.films.loader = true
                 this.$store.state.films.currentList[id].uploaded = false;
                 for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
@@ -488,6 +594,7 @@ export default {
         object-fit: cover;
     }
 }
+
 .poa {
     cursor: pointer;
     position: absolute;
@@ -495,4 +602,17 @@ export default {
     top: -10px;
 }
 
+.select_error {
+    // position: absolute;
+    // bottom: -20px;
+    // left: 0;
+    padding-top: 5px;
+    font-size: 14px;
+    text-align: left;
+    color: #F54E4E;
+}
+
+.invalid {
+    box-shadow: 0px 0px 10px #F54E4E;
+}
 </style>

@@ -124,7 +124,7 @@ export default {
                     id: this.$store.state.news.newsList.length,
                     name: doc.id,
                     uploaded: true,
-                    lang: doc.data().lang,
+                    lang: 0,
                     data: doc.data().data,
                     creationDate: doc.data().creationDate,
                     toggle: doc.data().toggle,
