@@ -187,7 +187,6 @@ import Loader from '../components/Loader.vue'
 import HallList from '../components/HallList.vue'
 import { useVuelidate } from '@vuelidate/core'
 import { minLength, required, email, numeric, alpha } from '@vuelidate/validators'
-const props = defineProps(['id']);
 export default {
     components: {
         Loader,
