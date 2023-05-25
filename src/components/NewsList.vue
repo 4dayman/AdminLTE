@@ -98,20 +98,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.banner {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.banner {
-    width: 240px;
-
-    img {
-        height: 140px;
-        object-fit: cover;
-    }
-}
 
 .input-group {
     display: flex;
@@ -133,12 +119,6 @@ export default {
     gap: 10px;
 }
 
-.poa {
-    cursor: pointer;
-    position: absolute;
-    right: -10px;
-    top: -10px;
-}
 
 .modal-wrap {
     position: fixed;

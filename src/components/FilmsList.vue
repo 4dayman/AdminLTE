@@ -45,7 +45,7 @@ export default {
                 for (let i = 0; i < this.$store.state.films.currentList[id].images.length; i++) {
                     // delete main image
                     // if (this.$store.state.films.currentList[id].name !== null) {
-                    const delRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].name);
+                    const delRef = ref(storage, "films/cover/" + this.$store.state.films.currentList[id].images[i].cover.name);
                     await deleteObject(delRef).catch((e) => {
                         console.log(e);
                     });

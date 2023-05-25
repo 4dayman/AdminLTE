@@ -35,12 +35,12 @@ const routes = [
         component: () => import('../views/CinemasView.vue')
       },
       {
-        path: 'cinemasOne',
+        path: 'cinemasOne/:id',
         name: 'cinemasOne',
         component: () => import('../views/CinemasOneView.vue')
       },
       {
-        path: 'hallCard',
+        path: 'hallCard/:parent-:id',
         name: 'hallCard',
         component: () => import('../views/HallCardView.vue')
       },

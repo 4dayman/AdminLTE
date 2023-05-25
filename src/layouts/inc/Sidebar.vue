@@ -41,8 +41,11 @@
                     <nav-item icon="fas fa-image" link="/films">
                         Фильмы
                     </nav-item>
+                    <nav-item icon="fas fa-columns" link="/cinemas">
+                        Кинотеатры
+                    </nav-item>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <router-link to="/cinemas" class="nav-link">
                             <i class="nav-icon fas fa-columns"></i>
                             <p>
@@ -58,7 +61,7 @@
                                 Карточка зала
                             </nav-item>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <nav-item icon="fas fa-table" link="/news">
                         Новости

@@ -4,6 +4,7 @@ import banners from './banners'
 import films from './films'
 import news from './news'
 import proms from './proms'
+import cinemas from './cinemas'
 
 export default createStore({
   state: {
@@ -23,5 +24,6 @@ export default createStore({
     films,
     news,
     proms,
+    cinemas,
   }
 })
